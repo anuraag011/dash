@@ -12,8 +12,8 @@
 
 body {
     margin: 0;
-    background: #f7f7f7;
-    color: #111;
+    background: #111;
+    color: #eee;
     font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -33,11 +33,12 @@ body {
 .logo {
     font-size: 30px;
     font-weight: 700;
+    color: #fff;
 }
 
 .date {
     font-size: 17px;
-    color: #444;
+    color: #aaa;
 }
 
 .layout {
@@ -53,8 +54,8 @@ body {
 }
 
 .box {
-    background: white;
-    border: 1px solid #c9c9c9;
+    background: #1b1b1b;
+    border: 1px solid #333;
     border-radius: 12px;
 }
 
@@ -69,10 +70,11 @@ body {
 .pomodoro h2 {
     margin: 0 0 18px;
     font-size: 24px;
+    color: #fff;
 }
 
 .mode {
-    color: #666;
+    color: #999;
     font-size: 18px;
     margin-bottom: 22px;
 }
@@ -82,10 +84,11 @@ body {
     font-weight: 600;
     letter-spacing: -2px;
     margin-bottom: 16px;
+    color: #fff;
 }
 
 .selected-task {
-    color: #333;
+    color: #ccc;
     min-height: 22px;
     margin-bottom: 22px;
 }
@@ -97,9 +100,9 @@ body {
 }
 
 button {
-    border: 1px solid #aaa;
-    background: white;
-    color: #111;
+    border: 1px solid #444;
+    background: #222;
+    color: #eee;
     border-radius: 7px;
     padding: 10px 20px;
     font-size: 15px;
@@ -107,31 +110,37 @@ button {
 }
 
 button:hover {
-    background: #f1f1f1;
+    background: #2c2c2c;
 }
 
 .primary {
-    background: #111;
-    color: white;
-    border-color: #111;
+    background: #eee;
+    color: #111;
+    border-color: #eee;
 }
 
 .primary:hover {
-    background: #2b2b2b;
+    background: #fff;
 }
 
 .settings-button {
     margin-top: 18px;
     border: none;
     padding: 8px 12px;
-    color: #555;
+    color: #aaa;
+    background: transparent;
+}
+
+.settings-button:hover {
+    background: #222;
+    color: #eee;
 }
 
 .session-info {
     margin-top: 20px;
     text-align: left;
     font-size: 14px;
-    color: #555;
+    color: #999;
     max-height: 85px;
     overflow-y: auto;
 }
@@ -158,7 +167,7 @@ button:hover {
     width: 13px;
     height: 13px;
     border-radius: 50%;
-    background: #111;
+    background: #eee;
     justify-self: center;
 }
 
@@ -171,13 +180,13 @@ button:hover {
 }
 
 .dot.future {
-    background: #111;
+    background: #eee;
 }
 
 .progress-label {
     margin-top: 16px;
     font-size: 13px;
-    color: #666;
+    color: #888;
 }
 
 .graph-button {
@@ -196,6 +205,7 @@ button:hover {
 .tasks h2 {
     margin: 0 0 24px;
     font-size: 24px;
+    color: #fff;
 }
 
 .task-list {
@@ -212,23 +222,24 @@ button:hover {
     align-items: center;
     gap: 10px;
     padding: 12px 0;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #292929;
 }
 
 .task-name {
     flex: 1;
     min-width: 0;
     font-size: 16px;
+    color: #eee;
 }
 
 .task.completed .task-name {
     text-decoration: line-through;
-    color: #888;
+    color: #666;
 }
 
 .deadline {
     font-size: 13px;
-    color: #777;
+    color: #888;
     white-space: nowrap;
 }
 
@@ -254,7 +265,7 @@ button:hover {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.35);
+    background: rgba(0, 0, 0, 0.7);
     align-items: center;
     justify-content: center;
     padding: 20px;
@@ -267,7 +278,8 @@ button:hover {
 .modal-content {
     width: 100%;
     max-width: 430px;
-    background: white;
+    background: #1b1b1b;
+    border: 1px solid #333;
     border-radius: 12px;
     padding: 28px;
 }
@@ -275,6 +287,7 @@ button:hover {
 .modal-content h2 {
     margin-top: 0;
     margin-bottom: 24px;
+    color: #fff;
 }
 
 .form-group {
@@ -285,14 +298,21 @@ button:hover {
     display: block;
     margin-bottom: 7px;
     font-size: 14px;
+    color: #ccc;
 }
 
 input {
     width: 100%;
     padding: 11px;
-    border: 1px solid #aaa;
+    border: 1px solid #444;
+    background: #111;
+    color: #eee;
     border-radius: 6px;
     font-size: 15px;
+}
+
+input:focus {
+    outline: 1px solid #777;
 }
 
 .modal-buttons {
@@ -646,18 +666,6 @@ if (!data) {
 
         sessions: [],
 
-        /*
-            Total completed focus time for
-            each individual date.
-
-            Example:
-
-            dailyTotals["2026-09-15"] = 125
-
-            means 125 minutes were completed
-            on September 15.
-        */
-
         dailyTotals: {},
 
         settings: {
@@ -784,8 +792,6 @@ function renderTasks() {
             "task-actions";
 
 
-        /* DONE */
-
         const complete =
             document.createElement("button");
 
@@ -816,8 +822,6 @@ function renderTasks() {
         );
 
 
-        /* POMODORO */
-
         const pomo =
             document.createElement("button");
 
@@ -843,8 +847,6 @@ function renderTasks() {
             }
         );
 
-
-        /* DELETE */
 
         const del =
             document.createElement("button");
@@ -1102,14 +1104,8 @@ function finishTimer() {
     if (mode === "focus") {
 
         /*
-            This is the important part.
-
-            We add the completed session's
-            duration to the total for today.
-
-            Example:
-
-            25 + 25 + 25 = 75 minutes
+            Only a FULLY COMPLETED focus session
+            gets added to the cumulative time.
         */
 
         const sessionMinutes =
@@ -1119,6 +1115,7 @@ function finishTimer() {
             getToday();
 
         if (!data.dailyTotals[date]) {
+
             data.dailyTotals[date] = 0;
         }
 
@@ -1127,12 +1124,8 @@ function finishTimer() {
 
 
         /*
-            Keep the session record too,
-            because we still need it for:
-
-            - pause history
-            - progress graph
-            - knowing when sessions happened
+            Keep the individual session record
+            for pause history and the graph.
         */
 
         data.sessions.push({
@@ -1141,7 +1134,6 @@ function finishTimer() {
                 Date.now().toString(),
 
             date:
-
                 date,
 
             completedAt:
@@ -1390,7 +1382,7 @@ document.getElementById(
 );
 
 
-/* ---------------- 30 DAY DOTS ---------------- */
+/* ---------------- 30 DAY PROGRESS ---------------- */
 
 function dateAfter(
     dateString,
@@ -1431,12 +1423,12 @@ function renderProgress() {
 
 
     /*
-        Exactly 30 dots.
+        30 dots:
 
-        Dot 1 = today
-        Dot 2 = tomorrow
+        Dot 1  = today
+        Dot 2  = tomorrow
         ...
-        Dot 30 = 29 days from today.
+        Dot 30 = 29 days from today
     */
 
     for (
@@ -1461,7 +1453,7 @@ function renderProgress() {
 
 
         /*
-            Future day
+            Future day = black
         */
 
         if (date > startDate) {
@@ -1473,11 +1465,8 @@ function renderProgress() {
         } else {
 
             /*
-                Read the accumulated focus
-                time for this date.
-
-                This is NOT calculated from
-                session count.
+                Get the actual cumulative
+                completed focus time for this day.
             */
 
             const totalMinutes =
@@ -1508,8 +1497,7 @@ function renderProgress() {
 
 
         /*
-            Hovering over a dot tells you
-            exactly how much time was done.
+            Show the day's total on hover.
         */
 
         const totalMinutes =
@@ -1527,7 +1515,6 @@ function renderProgress() {
 
         dot.title =
             `${date}: ${hours}h ${minutes}m`;
-
 
         container.appendChild(dot);
     }
