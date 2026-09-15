@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>toDO Dashboard</title>
+<title>toDO</title>
 
 <style>
 * {
@@ -13,23 +12,22 @@
 
 body {
     margin: 0;
-    background: #f4f4f4;
-    color: #171717;
+    background: #f7f7f7;
+    color: #111;
     font-family: Arial, Helvetica, sans-serif;
 }
 
 .app {
-    width: min(1100px, 94vw);
-    margin: 35px auto;
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 48px 24px;
 }
 
-/* HEADER */
-
-header {
+.topbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 18px;
+    margin-bottom: 28px;
 }
 
 .logo {
@@ -38,338 +36,298 @@ header {
 }
 
 .date {
-    font-size: 16px;
-    color: #555;
+    font-size: 17px;
+    color: #444;
 }
 
-/* MAIN LAYOUT */
-
-.main {
+.layout {
     display: grid;
-    grid-template-columns: 1fr 1.15fr;
-    gap: 18px;
+    grid-template-columns: 1fr 1.35fr;
+    gap: 20px;
 }
 
 .left {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 20px;
 }
 
 .box {
     background: white;
-    border: 1px solid #bbb;
-    border-radius: 10px;
-    padding: 22px;
+    border: 1px solid #c9c9c9;
+    border-radius: 12px;
 }
 
-/* POMODORO */
-
 .pomodoro {
-    min-height: 300px;
+    min-height: 345px;
+    padding: 26px;
     text-align: center;
 }
 
 .pomodoro h2 {
-    margin: 0 0 15px;
-    font-size: 20px;
+    margin: 0 0 18px;
+    font-size: 24px;
+}
+
+.mode {
+    color: #666;
+    font-size: 18px;
+    margin-bottom: 22px;
 }
 
 .timer {
-    font-size: 64px;
-    font-weight: 700;
-    margin: 15px 0 8px;
-    font-variant-numeric: tabular-nums;
+    font-size: 68px;
+    font-weight: 600;
+    letter-spacing: -2px;
+    margin-bottom: 16px;
 }
 
-.timer-mode {
-    color: #666;
-    margin-bottom: 15px;
-}
-
-.timer-task {
+.selected-task {
+    color: #333;
     min-height: 22px;
-    color: #444;
-    margin-bottom: 18px;
+    margin-bottom: 22px;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
 }
 
 button {
-    cursor: pointer;
-    font-family: inherit;
-}
-
-.btn {
+    border: 1px solid #aaa;
     background: white;
-    border: 1px solid #999;
-    border-radius: 6px;
-    padding: 9px 18px;
-    font-size: 14px;
+    color: #111;
+    border-radius: 7px;
+    padding: 10px 20px;
+    font-size: 15px;
+    cursor: pointer;
 }
 
-.btn:hover {
-    background: #f0f0f0;
+button:hover {
+    background: #f1f1f1;
 }
 
-.btn-dark {
-    background: #171717;
+.primary {
+    background: #111;
     color: white;
-    border-color: #171717;
+    border-color: #111;
 }
 
-.btn-dark:hover {
-    background: #333;
+.primary:hover {
+    background: #2b2b2b;
 }
 
-.timer-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-}
-
-/* PROGRESS */
-
-.progress {
-    min-height: 150px;
-}
-
-.progress h2 {
-    margin: 0 0 18px;
-    font-size: 18px;
-}
-
-.activity {
-    display: grid;
-    grid-template-columns: repeat(30, 1fr);
-    gap: 5px;
-    align-items: center;
-}
-
-.dot {
-    width: 100%;
-    aspect-ratio: 1;
-    min-width: 8px;
-    border-radius: 50%;
+.settings-button {
+    margin-top: 18px;
     border: none;
-    background: #ddd;
-    padding: 0;
+    padding: 8px 12px;
+    color: #555;
 }
 
-.dot.level1 {
-    background: #b9e6a1;
-}
-
-.dot.level2 {
-    background: #79d45b;
-}
-
-.dot.level3 {
-    background: #42b72c;
-}
-
-.dot.level4 {
-    background: #16820a;
-}
-
-.progress-labels {
-    display: flex;
-    justify-content: space-between;
-    color: #777;
-    font-size: 12px;
-    margin-top: 8px;
-}
-
-/* HISTORY */
-
-.history {
-    min-height: 170px;
-}
-
-.history h2 {
-    margin: 0 0 14px;
-    font-size: 18px;
-}
-
-.history-list {
-    max-height: 180px;
+.session-info {
+    margin-top: 20px;
+    text-align: left;
+    font-size: 14px;
+    color: #555;
+    max-height: 80px;
     overflow-y: auto;
 }
 
-.history-day {
+.session-info div {
+    margin: 5px 0;
+}
+
+.progress-box {
+    min-height: 170px;
+    padding: 26px;
+}
+
+.progress-dots {
+    display: flex;
+    gap: 9px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+}
+
+.dot {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: #111;
+}
+
+.dot.green {
+    background: #2baa45;
+}
+
+.average-text {
+    margin-top: 18px;
+    font-size: 13px;
+    color: #666;
+}
+
+.graph-button {
+    margin-top: 18px;
+}
+
+.history {
+    min-height: 190px;
+    padding: 26px;
+}
+
+.history h2 {
+    margin: 0 0 18px;
+    font-size: 21px;
+}
+
+.history-row {
     display: flex;
     justify-content: space-between;
+    padding: 9px 0;
     border-bottom: 1px solid #eee;
-    padding: 8px 2px;
-    cursor: pointer;
+    font-size: 14px;
 }
-
-.history-day:hover {
-    background: #f7f7f7;
-}
-
-.history-day span:last-child {
-    color: #777;
-    font-size: 13px;
-}
-
-/* TASKS */
 
 .tasks {
-    min-height: 590px;
+    min-height: 595px;
+    padding: 26px;
     display: flex;
     flex-direction: column;
 }
 
-.tasks-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 25px;
-}
-
-.tasks-header h2 {
-    margin: 0;
-    font-size: 20px;
-}
-
-.tasks-date {
-    color: #555;
-    font-size: 14px;
+.tasks h2 {
+    margin: 0 0 24px;
+    font-size: 24px;
 }
 
 .task-list {
     flex: 1;
 }
 
-.task-row {
+.empty {
+    color: #777;
+    margin-top: 20px;
+}
+
+.task {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 11px 2px;
+    padding: 12px 0;
     border-bottom: 1px solid #eee;
-}
-
-.task-number {
-    width: 24px;
-    color: #555;
 }
 
 .task-name {
     flex: 1;
+    min-width: 0;
     font-size: 16px;
 }
 
-.task-deadline {
-    color: #777;
-    font-size: 13px;
-    margin-right: 8px;
-}
-
-.task-row.done .task-name {
+.task.completed .task-name {
     text-decoration: line-through;
     color: #888;
 }
 
-.task-row.done .task-deadline {
-    color: #aaa;
-}
-
-.task-action {
-    border: 1px solid #bbb;
-    background: white;
-    width: 27px;
-    height: 27px;
-    border-radius: 4px;
-}
-
-.task-action:hover {
-    background: #eee;
-}
-
-.task-empty {
+.deadline {
+    font-size: 13px;
     color: #777;
-    margin-top: 30px;
+    white-space: nowrap;
 }
 
-/* ADD TASK */
+.task-actions {
+    display: flex;
+    gap: 5px;
+}
+
+.small-button {
+    padding: 6px 9px;
+    font-size: 13px;
+}
 
 .add-task {
-    margin-top: 25px;
     align-self: flex-start;
+    margin-top: 20px;
+    min-width: 150px;
 }
 
-.add-task button {
-    min-width: 130px;
-}
+/* MODALS */
 
-/* MODAL */
-
-.modal-background {
+.modal {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,.45);
+    background: rgba(0,0,0,0.35);
     align-items: center;
     justify-content: center;
     padding: 20px;
 }
 
-.modal {
-    width: min(430px, 100%);
-    background: white;
-    border-radius: 10px;
-    padding: 25px;
+.modal.open {
+    display: flex;
 }
 
-.modal h2 {
-    margin-top: 0;
-}
-
-.field {
-    margin-bottom: 15px;
-}
-
-.field label {
-    display: block;
-    font-size: 14px;
-    margin-bottom: 6px;
-}
-
-.field input {
+.modal-content {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #bbb;
+    max-width: 430px;
+    background: white;
+    border-radius: 12px;
+    padding: 28px;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    margin-bottom: 24px;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 14px;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #aaa;
     border-radius: 6px;
+    font-size: 15px;
 }
 
 .modal-buttons {
     display: flex;
     justify-content: flex-end;
     gap: 8px;
-    margin-top: 20px;
+    margin-top: 22px;
 }
 
-/* HISTORY MODAL */
-
-.history-task {
-    padding: 7px 0;
-    border-bottom: 1px solid #eee;
+.settings-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
 }
-
-.history-task.done {
-    color: #777;
-    text-decoration: line-through;
-}
-
-/* MOBILE */
 
 @media (max-width: 750px) {
-
     .app {
-        width: 94vw;
-        margin: 18px auto;
+        padding: 25px 15px;
     }
 
-    .main {
+    .topbar {
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .date {
+        font-size: 14px;
+        text-align: right;
+    }
+
+    .layout {
         grid-template-columns: 1fr;
     }
 
@@ -378,15 +336,7 @@ button {
     }
 
     .timer {
-        min-height: 260px;
-    }
-
-    .timer {
-        font-size: 52px;
-    }
-
-    .activity {
-        gap: 3px;
+        font-size: 56px;
     }
 }
 </style>
@@ -396,177 +346,78 @@ button {
 
 <div class="app">
 
-    <header>
+    <div class="topbar">
         <div class="logo">toDO</div>
         <div class="date" id="currentDate"></div>
-    </header>
+    </div>
 
-
-    <div class="main">
-
-        <!-- LEFT SIDE -->
+    <div class="layout">
 
         <div class="left">
 
             <!-- POMODORO -->
-
-            <section class="box pomodoro">
+            <div class="box pomodoro">
 
                 <h2>Pomodoro</h2>
 
-                <div class="timer-mode" id="timerMode">
-                    Focus
-                </div>
+                <div class="mode" id="mode">Focus</div>
 
-                <div class="timer" id="timer">
-                    25:00
-                </div>
+                <div class="timer" id="timer">25:00</div>
 
-                <div class="timer-task" id="timerTask">
+                <div class="selected-task" id="selectedTask">
                     No task selected
                 </div>
 
-                <div class="timer-buttons">
-
-                    <button
-                        class="btn btn-dark"
-                        id="startTimer">
-                        Start
-                    </button>
-
-                    <button
-                        class="btn"
-                        id="resetTimer">
-                        Reset
-                    </button>
-
+                <div class="controls">
+                    <button class="primary" id="startPause">Start</button>
+                    <button id="reset">Reset</button>
                 </div>
 
-            </section>
+                <button class="settings-button" id="openSettings">
+                    Session settings
+                </button>
+
+                <div class="session-info" id="sessionInfo"></div>
+
+            </div>
 
 
             <!-- PROGRESS -->
+            <div class="box progress-box">
 
-            <section class="box progress">
+                <div class="progress-dots" id="progressDots"></div>
 
-                <h2>Progress</h2>
+                <div class="average-text" id="averageText"></div>
 
-                <div
-                    class="activity"
-                    id="activity">
-                </div>
-
-                <div class="progress-labels">
-                    <span id="progressStart"></span>
-                    <span>Today</span>
-                </div>
-
-            </section>
-
-
-            <!-- HISTORY -->
-
-            <section class="box history">
-
-                <h2>History</h2>
-
-                <div
-                    class="history-list"
-                    id="historyList">
-                </div>
-
-            </section>
-
-        </div>
-
-
-        <!-- RIGHT SIDE -->
-
-        <section class="box tasks">
-
-            <div class="tasks-header">
-
-                <h2>Tasks for today</h2>
-
-                <div
-                    class="tasks-date"
-                    id="tasksDate">
-                </div>
-
-            </div>
-
-
-            <div
-                class="task-list"
-                id="taskList">
-            </div>
-
-
-            <div class="add-task">
-
-                <button
-                    class="btn btn-dark"
-                    id="openAddTask">
-                    Add task
+                <button class="graph-button" id="openGraph">
+                    Progress graph
                 </button>
 
             </div>
 
-        </section>
 
-    </div>
+            <!-- HISTORY -->
+            <div class="box history">
 
-</div>
+                <h2>History</h2>
 
+                <div id="historyList">
+                    <div class="empty">No history yet.</div>
+                </div>
 
-<!-- ADD TASK MODAL -->
-
-<div
-    class="modal-background"
-    id="addModal">
-
-    <div class="modal">
-
-        <h2>Add task</h2>
-
-        <div class="field">
-
-            <label for="taskName">
-                Task
-            </label>
-
-            <input
-                id="taskName"
-                type="text"
-                placeholder="What do you need to do?">
+            </div>
 
         </div>
 
 
-        <div class="field">
+        <!-- TASKS -->
+        <div class="box tasks">
 
-            <label for="taskDeadline">
-                Deadline
-            </label>
+            <h2>Tasks for today</h2>
 
-            <input
-                id="taskDeadline"
-                type="datetime-local">
+            <div class="task-list" id="taskList"></div>
 
-        </div>
-
-
-        <div class="modal-buttons">
-
-            <button
-                class="btn"
-                id="cancelAdd">
-                Cancel
-            </button>
-
-            <button
-                class="btn btn-dark"
-                id="saveTask">
+            <button class="primary add-task" id="openTaskModal">
                 Add task
             </button>
 
@@ -577,27 +428,89 @@ button {
 </div>
 
 
-<!-- HISTORY MODAL -->
+<!-- ADD TASK MODAL -->
 
-<div
-    class="modal-background"
-    id="historyModal">
+<div class="modal" id="taskModal">
 
-    <div class="modal">
+    <div class="modal-content">
 
-        <h2 id="historyTitle"></h2>
+        <h2>Add task</h2>
 
-        <div id="historyTasks"></div>
+        <form id="taskForm">
 
-        <div class="modal-buttons">
+            <div class="form-group">
+                <label for="taskName">Task</label>
+                <input id="taskName" required autocomplete="off">
+            </div>
 
-            <button
-                class="btn"
-                id="closeHistory">
-                Close
-            </button>
+            <div class="form-group">
+                <label for="taskDeadline">Deadline</label>
+                <input id="taskDeadline" type="datetime-local">
+            </div>
 
-        </div>
+            <div class="modal-buttons">
+                <button type="button" id="cancelTask">Cancel</button>
+                <button class="primary" type="submit">Add task</button>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- SESSION SETTINGS MODAL -->
+
+<div class="modal" id="settingsModal">
+
+    <div class="modal-content">
+
+        <h2>Session settings</h2>
+
+        <form id="settingsForm">
+
+            <div class="settings-grid">
+
+                <div class="form-group">
+                    <label for="focusMinutes">
+                        Focus minutes
+                    </label>
+                    <input
+                        id="focusMinutes"
+                        type="number"
+                        min="1"
+                        max="180"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="breakMinutes">
+                        Break minutes
+                    </label>
+                    <input
+                        id="breakMinutes"
+                        type="number"
+                        min="1"
+                        max="60"
+                        required
+                    >
+                </div>
+
+            </div>
+
+            <div class="modal-buttons">
+                <button type="button" id="cancelSettings">
+                    Cancel
+                </button>
+
+                <button class="primary" type="submit">
+                    Save
+                </button>
+            </div>
+
+        </form>
 
     </div>
 
@@ -606,19 +519,73 @@ button {
 
 <script>
 
-/* =========================================================
-   DATA
-========================================================= */
+const STORAGE_KEY = "todo_dashboard_v3";
 
-const STORAGE_KEY = "todo_dashboard_v2";
+const today = () => {
+    const d = new Date();
+    return d.toISOString().slice(0, 10);
+};
+
+const formatDate = dateString => {
+    const [y, m, d] = dateString.split("-").map(Number);
+
+    return new Date(y, m - 1, d).toLocaleDateString(
+        undefined,
+        {
+            weekday: "long",
+            month: "long",
+            day: "numeric",
+            year: "numeric"
+        }
+    );
+};
+
+const formatShortDate = dateString => {
+    const [y, m, d] = dateString.split("-").map(Number);
+
+    return new Date(y, m - 1, d).toLocaleDateString(
+        undefined,
+        {
+            month: "short",
+            day: "numeric"
+        }
+    );
+};
+
+
+/* ---------------- DATA ---------------- */
 
 let data = JSON.parse(
-    localStorage.getItem(STORAGE_KEY)
-    || '{"tasks":[],"pomodoros":[]}'
+    localStorage.getItem(STORAGE_KEY) || "null"
 );
 
-function saveData() {
+if (!data) {
+    data = {
+        tasks: [],
+        sessions: [],
+        settings: {
+            focus: 25,
+            break: 5
+        }
+    };
+}
 
+if (!data.settings) {
+    data.settings = {
+        focus: 25,
+        break: 5
+    };
+}
+
+if (!data.sessions) {
+    data.sessions = [];
+}
+
+if (!data.tasks) {
+    data.tasks = [];
+}
+
+function save() {
     localStorage.setItem(
         STORAGE_KEY,
         JSON.stringify(data)
@@ -626,797 +593,749 @@ function saveData() {
 }
 
 
-/* =========================================================
-   DATE HELPERS
-========================================================= */
+/* ---------------- DATE ---------------- */
 
-function dateKey(date = new Date()) {
-
-    const year = date.getFullYear();
-
-    const month = String(
-        date.getMonth() + 1
-    ).padStart(2, "0");
-
-    const day = String(
-        date.getDate()
-    ).padStart(2, "0");
-
-    return `${year}-${month}-${day}`;
-}
+document.getElementById("currentDate").textContent =
+    formatDate(today());
 
 
-function formatDate(date) {
-
-    return date.toLocaleDateString(
-        undefined,
-        {
-            day: "numeric",
-            month: "short",
-            year: "numeric"
-        }
-    );
-}
-
-
-function formatTime(date) {
-
-    return date.toLocaleTimeString(
-        undefined,
-        {
-            hour: "numeric",
-            minute: "2-digit"
-        }
-    );
-}
-
-
-/* =========================================================
-   HEADER
-========================================================= */
-
-function renderDates() {
-
-    const today = new Date();
-
-    document.getElementById(
-        "currentDate"
-    ).textContent = today.toLocaleDateString(
-        undefined,
-        {
-            weekday: "long",
-            day: "numeric",
-            month: "long",
-            year: "numeric"
-        }
-    );
-
-    document.getElementById(
-        "tasksDate"
-    ).textContent = today.toLocaleDateString(
-        undefined,
-        {
-            day: "numeric",
-            month: "short",
-            year: "numeric"
-        }
-    );
-}
-
-
-/* =========================================================
-   TASKS
-========================================================= */
+/* ---------------- TASKS ---------------- */
 
 function renderTasks() {
 
-    const list =
-        document.getElementById("taskList");
+    const list = document.getElementById("taskList");
 
-    const today = dateKey();
+    list.innerHTML = "";
 
-    const tasks = data.tasks
-        .filter(task =>
-            task.createdDate === today
-        )
-        .sort(
-            (a, b) =>
-                new Date(a.deadline)
-                -
-                new Date(b.deadline)
-        );
+    const todaysTasks = data.tasks.filter(
+        task => task.date === today()
+    );
 
-    if (tasks.length === 0) {
+    if (todaysTasks.length === 0) {
 
         list.innerHTML =
-            '<div class="task-empty">No tasks today.</div>';
+            '<div class="empty">No tasks today.</div>';
 
         return;
     }
 
-    list.innerHTML = "";
+    todaysTasks.forEach(task => {
 
-    tasks.forEach(
-        (task, index) => {
+        const row = document.createElement("div");
 
-            const row =
-                document.createElement("div");
+        row.className =
+            "task" + (task.completed ? " completed" : "");
 
-            row.className =
-                "task-row"
-                + (task.done ? " done" : "");
+        const name = document.createElement("div");
 
-            const number =
-                document.createElement("div");
+        name.className = "task-name";
+        name.textContent = task.name;
 
-            number.className =
-                "task-number";
+        const deadline = document.createElement("div");
 
-            number.textContent =
-                `${index + 1}.`;
+        deadline.className = "deadline";
 
-            const name =
-                document.createElement("div");
+        if (task.deadline) {
 
-            name.className =
-                "task-name";
-
-            name.textContent =
-                task.title;
-
-            const deadline =
-                document.createElement("div");
-
-            deadline.className =
-                "task-deadline";
+            const date = new Date(task.deadline);
 
             deadline.textContent =
-                formatTime(
-                    new Date(task.deadline)
+                date.toLocaleTimeString(
+                    [],
+                    {
+                        hour: "2-digit",
+                        minute: "2-digit"
+                    }
                 );
-
-            const complete =
-                document.createElement("button");
-
-            complete.className =
-                "task-action";
-
-            complete.textContent =
-                task.done ? "↶" : "✓";
-
-            complete.title =
-                task.done
-                ? "Undo"
-                : "Complete";
-
-            complete.onclick =
-                () => toggleTask(task.id);
-
-            const timerButton =
-                document.createElement("button");
-
-            timerButton.className =
-                "task-action";
-
-            timerButton.textContent =
-                "T";
-
-            timerButton.title =
-                "Use this task for Pomodoro";
-
-            timerButton.onclick =
-                () => selectTimerTask(task.id);
-
-            const deleteButton =
-                document.createElement("button");
-
-            deleteButton.className =
-                "task-action";
-
-            deleteButton.textContent =
-                "×";
-
-            deleteButton.title =
-                "Delete";
-
-            deleteButton.onclick =
-                () => deleteTask(task.id);
-
-            row.appendChild(number);
-            row.appendChild(name);
-            row.appendChild(deadline);
-            row.appendChild(complete);
-            row.appendChild(timerButton);
-            row.appendChild(deleteButton);
-
-            list.appendChild(row);
         }
+
+        const actions =
+            document.createElement("div");
+
+        actions.className = "task-actions";
+
+
+        /* COMPLETE */
+
+        const complete =
+            document.createElement("button");
+
+        complete.className = "small-button";
+
+        complete.textContent =
+            task.completed ? "Undo" : "Done";
+
+        complete.addEventListener(
+            "click",
+            () => {
+
+                task.completed =
+                    !task.completed;
+
+                if (task.completed) {
+                    task.completedAt =
+                        new Date().toISOString();
+                } else {
+                    task.completedAt = null;
+                }
+
+                save();
+                renderTasks();
+            }
+        );
+
+
+        /* POMODORO */
+
+        const pomo =
+            document.createElement("button");
+
+        pomo.className = "small-button";
+        pomo.textContent = "T";
+
+        pomo.title = "Use this task for Pomodoro";
+
+        pomo.addEventListener(
+            "click",
+            () => {
+
+                selectedTask = task;
+
+                document.getElementById(
+                    "selectedTask"
+                ).textContent = task.name;
+            }
+        );
+
+
+        /* DELETE */
+
+        const del =
+            document.createElement("button");
+
+        del.className = "small-button";
+        del.textContent = "Delete";
+
+        del.addEventListener(
+            "click",
+            () => {
+
+                data.tasks =
+                    data.tasks.filter(
+                        x => x.id !== task.id
+                    );
+
+                if (
+                    selectedTask &&
+                    selectedTask.id === task.id
+                ) {
+                    selectedTask = null;
+
+                    document.getElementById(
+                        "selectedTask"
+                    ).textContent =
+                        "No task selected";
+                }
+
+                save();
+                renderTasks();
+                renderHistory();
+            }
+        );
+
+
+        actions.append(
+            complete,
+            pomo,
+            del
+        );
+
+        row.append(
+            name,
+            deadline,
+            actions
+        );
+
+        list.appendChild(row);
+    });
+}
+
+
+/* ADD TASK */
+
+document.getElementById(
+    "openTaskModal"
+).addEventListener(
+    "click",
+    () => {
+
+        document.getElementById(
+            "taskModal"
+        ).classList.add("open");
+
+        document.getElementById(
+            "taskName"
+        ).focus();
+    }
+);
+
+
+document.getElementById(
+    "cancelTask"
+).addEventListener(
+    "click",
+    () => {
+
+        document.getElementById(
+            "taskModal"
+        ).classList.remove("open");
+    }
+);
+
+
+document.getElementById(
+    "taskForm"
+).addEventListener(
+    "submit",
+    e => {
+
+        e.preventDefault();
+
+        const name =
+            document.getElementById(
+                "taskName"
+            ).value.trim();
+
+        const deadline =
+            document.getElementById(
+                "taskDeadline"
+            ).value;
+
+        if (!name) return;
+
+        data.tasks.push({
+            id: Date.now().toString(),
+            name,
+            date: today(),
+            deadline: deadline || null,
+            completed: false,
+            completedAt: null
+        });
+
+        save();
+
+        e.target.reset();
+
+        document.getElementById(
+            "taskModal"
+        ).classList.remove("open");
+
+        renderTasks();
+        renderHistory();
+    }
+);
+
+
+/* ---------------- POMODORO ---------------- */
+
+let mode = "focus";
+let running = false;
+let selectedTask = null;
+let remainingSeconds =
+    data.settings.focus * 60;
+
+let interval = null;
+
+let currentSessionPauses = 0;
+let sessionNumber = 1;
+
+
+function updateTimer() {
+
+    const minutes =
+        Math.floor(remainingSeconds / 60);
+
+    const seconds =
+        remainingSeconds % 60;
+
+    document.getElementById(
+        "timer"
+    ).textContent =
+        String(minutes).padStart(2, "0")
+        + ":"
+        + String(seconds).padStart(2, "0");
+}
+
+
+function startTimer() {
+
+    if (running) return;
+
+    running = true;
+
+    document.getElementById(
+        "startPause"
+    ).textContent = "Pause";
+
+    interval = setInterval(
+        () => {
+
+            remainingSeconds--;
+
+            updateTimer();
+
+            if (remainingSeconds <= 0) {
+
+                clearInterval(interval);
+
+                running = false;
+
+                document.getElementById(
+                    "startPause"
+                ).textContent = "Start";
+
+                finishTimer();
+            }
+
+        },
+        1000
     );
 }
 
 
-function toggleTask(id) {
+function pauseTimer() {
 
-    const task =
-        data.tasks.find(
-            task => task.id === id
-        );
+    if (!running) return;
 
-    if (!task) return;
+    clearInterval(interval);
 
-    task.done = !task.done;
+    running = false;
 
-    if (task.done) {
+    currentSessionPauses++;
 
-        task.completedAt =
-            new Date().toISOString();
+    document.getElementById(
+        "startPause"
+    ).textContent = "Start";
+
+    renderSessionInfo();
+}
+
+
+function finishTimer() {
+
+    if (mode === "focus") {
+
+        /* A completed focus session */
+
+        data.sessions.push({
+            id: Date.now().toString(),
+            date: today(),
+            completedAt: new Date().toISOString(),
+            taskId:
+                selectedTask
+                    ? selectedTask.id
+                    : null,
+            pauses: currentSessionPauses
+        });
+
+        save();
+
+        currentSessionPauses = 0;
+
+        sessionNumber++;
+
+        mode = "break";
+
+        remainingSeconds =
+            data.settings.break;
+
+        document.getElementById(
+            "mode"
+        ).textContent = "Break";
+
+        renderProgress();
+        renderSessionInfo();
 
     } else {
 
-        task.completedAt = null;
+        mode = "focus";
+
+        remainingSeconds =
+            data.settings.focus;
+
+        document.getElementById(
+            "mode"
+        ).textContent = "Focus";
     }
 
-    saveData();
-
-    renderAll();
+    updateTimer();
 }
 
 
-function deleteTask(id) {
-
-    data.tasks =
-        data.tasks.filter(
-            task => task.id !== id
-        );
-
-    saveData();
-
-    renderAll();
-}
-
-
-/* =========================================================
-   ADD TASK
-========================================================= */
-
-const addModal =
-    document.getElementById("addModal");
-
-
 document.getElementById(
-    "openAddTask"
-).onclick = () => {
-
-    addModal.style.display = "flex";
-
-    document.getElementById(
-        "taskName"
-    ).focus();
-};
-
-
-document.getElementById(
-    "cancelAdd"
-).onclick = () => {
-
-    addModal.style.display = "none";
-};
-
-
-document.getElementById(
-    "saveTask"
-).onclick = addTask;
-
-
-document.getElementById(
-    "taskName"
+    "startPause"
 ).addEventListener(
-    "keydown",
-    event => {
+    "click",
+    () => {
 
-        if (event.key === "Enter") {
-            addTask();
+        if (running) {
+            pauseTimer();
+        } else {
+            startTimer();
         }
     }
 );
 
 
-function addTask() {
+document.getElementById(
+    "reset"
+).addEventListener(
+    "click",
+    () => {
 
-    const name =
+        clearInterval(interval);
+
+        running = false;
+
+        mode = "focus";
+
+        remainingSeconds =
+            data.settings.focus * 60;
+
+        currentSessionPauses = 0;
+
         document.getElementById(
-            "taskName"
-        ).value.trim();
+            "mode"
+        ).textContent = "Focus";
 
-    const deadlineInput =
         document.getElementById(
-            "taskDeadline"
-        ).value;
+            "startPause"
+        ).textContent = "Start";
 
-    if (!name) {
+        updateTimer();
+        renderSessionInfo();
+    }
+);
 
-        alert("Enter a task.");
+
+/* ---------------- SESSION INFO ---------------- */
+
+function renderSessionInfo() {
+
+    const box =
+        document.getElementById(
+            "sessionInfo"
+        );
+
+    const sessions =
+        data.sessions.filter(
+            s => s.date === today()
+        );
+
+    if (sessions.length === 0) {
+
+        box.innerHTML =
+            "Today's completed sessions: 0";
 
         return;
     }
 
-    let deadline;
+    box.innerHTML =
+        `<div><strong>Today's sessions:</strong> ${sessions.length}</div>`
+        +
+        sessions
+            .map(
+                (s, i) =>
+                    `<div>Session ${i + 1} — ${s.pauses} pauses</div>`
+            )
+            .join("");
+}
 
-    if (deadlineInput) {
 
-        deadline =
-            new Date(deadlineInput);
+/* ---------------- SETTINGS ---------------- */
 
-    } else {
+document.getElementById(
+    "openSettings"
+).addEventListener(
+    "click",
+    () => {
 
-        deadline =
-            new Date(
-                Date.now()
-                + 60 * 60 * 1000
-            );
+        document.getElementById(
+            "focusMinutes"
+        ).value =
+            data.settings.focus;
+
+        document.getElementById(
+            "breakMinutes"
+        ).value =
+            data.settings.break;
+
+        document.getElementById(
+            "settingsModal"
+        ).classList.add("open");
     }
-
-    const task = {
-
-        id:
-            Date.now().toString(),
-
-        title:
-            name,
-
-        deadline:
-            deadline.toISOString(),
-
-        createdDate:
-            dateKey(),
-
-        done:
-            false,
-
-        completedAt:
-            null
-    };
-
-    data.tasks.push(task);
-
-    saveData();
-
-    document.getElementById(
-        "taskName"
-    ).value = "";
-
-    document.getElementById(
-        "taskDeadline"
-    ).value = "";
-
-    addModal.style.display = "none";
-
-    renderAll();
-}
-
-
-/* =========================================================
-   POMODORO
-========================================================= */
-
-let timerSeconds = 25 * 60;
-
-let timerRunning = false;
-
-let timerInterval = null;
-
-let timerMode = "focus";
-
-let selectedTaskId = null;
-
-
-function updateTimerDisplay() {
-
-    const minutes =
-        Math.floor(timerSeconds / 60);
-
-    const seconds =
-        timerSeconds % 60;
-
-    document.getElementById(
-        "timer"
-    ).textContent =
-        `${String(minutes).padStart(2,"0")}:${String(seconds).padStart(2,"0")}`;
-
-    document.getElementById(
-        "timerMode"
-    ).textContent =
-        timerMode === "focus"
-        ? "Focus"
-        : "Break";
-
-    const task =
-        data.tasks.find(
-            task => task.id === selectedTaskId
-        );
-
-    document.getElementById(
-        "timerTask"
-    ).textContent =
-        task
-        ? task.title
-        : "No task selected";
-
-    document.getElementById(
-        "startTimer"
-    ).textContent =
-        timerRunning
-        ? "Pause"
-        : "Start";
-}
-
-
-function selectTimerTask(id) {
-
-    selectedTaskId = id;
-
-    updateTimerDisplay();
-}
+);
 
 
 document.getElementById(
-    "startTimer"
-).onclick = () => {
+    "cancelSettings"
+).addEventListener(
+    "click",
+    () => {
 
-    if (timerRunning) {
-
-        clearInterval(timerInterval);
-
-        timerRunning = false;
-
-        updateTimerDisplay();
-
-        return;
+        document.getElementById(
+            "settingsModal"
+        ).classList.remove("open");
     }
-
-    timerRunning = true;
-
-    timerInterval =
-        setInterval(
-            timerTick,
-            1000
-        );
-
-    updateTimerDisplay();
-};
+);
 
 
-function timerTick() {
+document.getElementById(
+    "settingsForm"
+).addEventListener(
+    "submit",
+    e => {
 
-    timerSeconds--;
+        e.preventDefault();
 
-    if (timerSeconds <= 0) {
+        const focus =
+            Number(
+                document.getElementById(
+                    "focusMinutes"
+                ).value
+            );
 
-        clearInterval(timerInterval);
+        const breakTime =
+            Number(
+                document.getElementById(
+                    "breakMinutes"
+                ).value
+            );
 
-        timerRunning = false;
-
-        if (timerMode === "focus") {
-
-            data.pomodoros.push({
-
-                date: dateKey(),
-
-                taskId:
-                    selectedTaskId,
-
-                completedAt:
-                    new Date().toISOString(),
-
-                minutes: 25
-            });
-
-            saveData();
-
-            timerMode = "break";
-
-            timerSeconds =
-                5 * 60;
-
-        } else {
-
-            timerMode = "focus";
-
-            timerSeconds =
-                25 * 60;
+        if (
+            !Number.isFinite(focus) ||
+            !Number.isFinite(breakTime) ||
+            focus < 1 ||
+            breakTime < 1
+        ) {
+            return;
         }
 
-        alert(
-            timerMode === "break"
-            ? "Focus session complete."
-            : "Break complete."
-        );
+        data.settings.focus = focus;
+        data.settings.break = breakTime;
+
+        save();
+
+        clearInterval(interval);
+
+        running = false;
+        mode = "focus";
+
+        remainingSeconds =
+            focus * 60;
+
+        document.getElementById(
+            "mode"
+        ).textContent = "Focus";
+
+        document.getElementById(
+            "startPause"
+        ).textContent = "Start";
+
+        document.getElementById(
+            "settingsModal"
+        ).classList.remove("open");
+
+        updateTimer();
+    }
+);
+
+
+/* ---------------- PROGRESS DOTS ---------------- */
+
+/*
+    Historical average is calculated from completed
+    focus sessions on previous days.
+
+    Example:
+
+    Monday: 4 sessions
+    Tuesday: 6 sessions
+    Wednesday: 5 sessions
+
+    Average = 5 sessions/day
+
+    If today reaches 5 sessions,
+    all dots become green.
+*/
+
+function getAverageSessions() {
+
+    const yesterdaySessions = {};
+
+    data.sessions.forEach(session => {
+
+        if (session.date === today()) return;
+
+        if (!yesterdaySessions[session.date]) {
+            yesterdaySessions[session.date] = 0;
+        }
+
+        yesterdaySessions[session.date]++;
+    });
+
+    const values =
+        Object.values(yesterdaySessions);
+
+    if (values.length === 0) {
+        return 0;
     }
 
-    updateTimerDisplay();
+    return values.reduce(
+        (a, b) => a + b,
+        0
+    ) / values.length;
 }
 
-
-document.getElementById(
-    "resetTimer"
-).onclick = () => {
-
-    clearInterval(timerInterval);
-
-    timerRunning = false;
-
-    timerMode = "focus";
-
-    timerSeconds =
-        25 * 60;
-
-    updateTimerDisplay();
-};
-
-
-/* =========================================================
-   PROGRESS
-========================================================= */
 
 function renderProgress() {
 
-    const activity =
+    const container =
         document.getElementById(
-            "activity"
+            "progressDots"
         );
 
-    activity.innerHTML = "";
+    container.innerHTML = "";
 
-    const today =
-        new Date();
+    const average =
+        getAverageSessions();
 
-    for (
-        let i = 29;
-        i >= 0;
-        i--
-    ) {
+    const completedToday =
+        data.sessions.filter(
+            s => s.date === today()
+        ).length;
 
-        const day =
-            new Date(today);
+    /*
+        No historical data yet:
+        dots remain black.
+    */
 
-        day.setHours(
-            0, 0, 0, 0
+    const threshold =
+        Math.max(
+            1,
+            Math.ceil(average)
         );
 
-        day.setDate(
-            day.getDate() - i
-        );
+    const reached =
+        average > 0 &&
+        completedToday >= threshold;
 
-        const key =
-            dateKey(day);
+    /*
+        10 simple dots.
+        They are all black until today's
+        session count reaches the normal average.
+    */
 
-        const completed =
-            data.tasks.filter(
-                task =>
-                    task.completedAt
-                    &&
-                    dateKey(
-                        new Date(
-                            task.completedAt
-                        )
-                    ) === key
-            ).length;
-
-        let level = 0;
-
-        if (completed >= 6)
-            level = 4;
-
-        else if (completed >= 4)
-            level = 3;
-
-        else if (completed >= 2)
-            level = 2;
-
-        else if (completed >= 1)
-            level = 1;
+    for (let i = 0; i < 10; i++) {
 
         const dot =
-            document.createElement(
-                "button"
-            );
+            document.createElement("div");
 
         dot.className =
-            "dot";
+            "dot" +
+            (reached ? " green" : "");
 
-        if (level > 0)
-            dot.classList.add(
-                `level${level}`
-            );
+        container.appendChild(dot);
+    }
 
-        dot.title =
-            `${formatDate(day)}: ${completed} completed`;
+    const text =
+        document.getElementById(
+            "averageText"
+        );
 
-        dot.onclick =
-            () => openHistoryForDate(key);
+    if (average === 0) {
 
-        activity.appendChild(dot);
+        text.textContent =
+            "Complete sessions on a few days to establish your average.";
 
-        if (i === 29) {
+    } else {
 
-            document.getElementById(
-                "progressStart"
-            ).textContent =
-                day.toLocaleDateString(
-                    undefined,
-                    {
-                        month: "short",
-                        day: "numeric"
-                    }
-                );
-        }
+        text.textContent =
+            `${completedToday} / ${threshold} sessions today`;
     }
 }
 
 
-/* =========================================================
-   HISTORY
-========================================================= */
+/* ---------------- HISTORY ---------------- */
 
 function renderHistory() {
 
-    const list =
+    const box =
         document.getElementById(
             "historyList"
         );
 
     const dates = [
         ...new Set(
-            data.tasks.map(
-                task => task.createdDate
+            data.sessions.map(
+                s => s.date
             )
         )
     ].sort().reverse();
 
     if (dates.length === 0) {
 
-        list.innerHTML =
-            '<div style="color:#777">No history yet.</div>';
+        box.innerHTML =
+            '<div class="empty">No history yet.</div>';
 
         return;
     }
 
-    list.innerHTML = "";
+    box.innerHTML = "";
 
-    dates.forEach(
-        key => {
+    dates.slice(0, 5).forEach(date => {
 
-            const tasks =
-                data.tasks.filter(
-                    task =>
-                        task.createdDate === key
-                );
+        const count =
+            data.sessions.filter(
+                s => s.date === date
+            ).length;
 
-            const completed =
-                tasks.filter(
-                    task => task.done
-                ).length;
+        const row =
+            document.createElement("div");
 
-            const row =
-                document.createElement(
-                    "div"
-                );
+        row.className = "history-row";
 
-            row.className =
-                "history-day";
+        row.innerHTML =
+            `<span>${formatShortDate(date)}</span>`
+            +
+            `<span>${count} session${count === 1 ? "" : "s"}</span>`;
 
-            const date =
-                new Date(
-                    key + "T12:00:00"
-                );
-
-            row.innerHTML =
-                `<span>${formatDate(date)}</span>
-                 <span>${completed}/${tasks.length} completed</span>`;
-
-            row.onclick =
-                () => openHistoryForDate(key);
-
-            list.appendChild(row);
-        }
-    );
+        box.appendChild(row);
+    });
 }
 
 
-const historyModal =
-    document.getElementById(
-        "historyModal"
-    );
-
-
-function openHistoryForDate(key) {
-
-    const tasks =
-        data.tasks.filter(
-            task =>
-                task.createdDate === key
-        );
-
-    if (!tasks.length)
-        return;
-
-    const date =
-        new Date(
-            key + "T12:00:00"
-        );
-
-    document.getElementById(
-        "historyTitle"
-    ).textContent =
-        formatDate(date);
-
-    const container =
-        document.getElementById(
-            "historyTasks"
-        );
-
-    container.innerHTML = "";
-
-    tasks.forEach(
-        task => {
-
-            const item =
-                document.createElement(
-                    "div"
-                );
-
-            item.className =
-                "history-task"
-                + (task.done ? " done" : "");
-
-            item.textContent =
-                task.title;
-
-            container.appendChild(item);
-        }
-    );
-
-    historyModal.style.display =
-        "flex";
-}
-
+/* ---------------- GRAPH BUTTON ---------------- */
 
 document.getElementById(
-    "closeHistory"
-).onclick = () => {
+    "openGraph"
+).addEventListener(
+    "click",
+    () => {
 
-    historyModal.style.display =
-        "none";
-};
-
-
-/* =========================================================
-   RENDER
-========================================================= */
-
-function renderAll() {
-
-    renderDates();
-
-    renderTasks();
-
-    renderProgress();
-
-    renderHistory();
-
-    updateTimerDisplay();
-}
-
-
-renderAll();
-
-
-/* Update countdowns periodically */
-
-setInterval(
-    renderTasks,
-    30000
+        window.location.href =
+            "graph.html";
+    }
 );
+
+
+/* ---------------- INITIALIZE ---------------- */
+
+renderTasks();
+renderProgress();
+renderHistory();
+renderSessionInfo();
+updateTimer();
 
 </script>
 
