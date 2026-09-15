@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+from pathlib import Path
+
+html = r'''<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -6,9 +8,7 @@
 <title>toDO</title>
 
 <style>
-* {
-    box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
     margin: 0;
@@ -16,6 +16,93 @@ body {
     color: #eee;
     font-family: Arial, Helvetica, sans-serif;
 }
+
+button {
+    border: 1px solid #444;
+    background: #222;
+    color: #eee;
+    border-radius: 7px;
+    padding: 10px 20px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+button:hover { background: #2c2c2c; }
+
+.primary {
+    background: #eee;
+    color: #111;
+    border-color: #eee;
+}
+
+.primary:hover { background: #fff; }
+
+input {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #444;
+    background: #111;
+    color: #eee;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+input:focus { outline: 1px solid #777; }
+
+/* AUTH */
+
+.auth-screen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.auth-box {
+    width: 100%;
+    max-width: 400px;
+    background: #1b1b1b;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 32px;
+}
+
+.auth-logo {
+    font-size: 30px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 28px;
+}
+
+.auth-box h2 {
+    margin: 0 0 22px;
+    color: #fff;
+}
+
+.form-group { margin-bottom: 18px; }
+
+.form-group label {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 14px;
+    color: #ccc;
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 22px;
+}
+
+.auth-message {
+    min-height: 20px;
+    margin-top: 16px;
+    font-size: 14px;
+    color: #aaa;
+}
+
+/* APP */
 
 .app {
     max-width: 1060px;
@@ -36,9 +123,20 @@ body {
     color: #fff;
 }
 
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
 .date {
     font-size: 17px;
     color: #aaa;
+}
+
+.logout-button {
+    padding: 7px 11px;
+    font-size: 13px;
 }
 
 .layout {
@@ -99,30 +197,6 @@ body {
     gap: 10px;
 }
 
-button {
-    border: 1px solid #444;
-    background: #222;
-    color: #eee;
-    border-radius: 7px;
-    padding: 10px 20px;
-    font-size: 15px;
-    cursor: pointer;
-}
-
-button:hover {
-    background: #2c2c2c;
-}
-
-.primary {
-    background: #eee;
-    color: #111;
-    border-color: #eee;
-}
-
-.primary:hover {
-    background: #fff;
-}
-
 .settings-button {
     margin-top: 18px;
     border: none;
@@ -145,11 +219,9 @@ button:hover {
     overflow-y: auto;
 }
 
-.session-info div {
-    margin: 5px 0;
-}
+.session-info div { margin: 5px 0; }
 
-/* 30 DAY PROGRESS */
+/* PROGRESS */
 
 .progress-box {
     min-height: 170px;
@@ -171,17 +243,9 @@ button:hover {
     justify-self: center;
 }
 
-.dot.green {
-    background: #2baa45;
-}
-
-.dot.red {
-    background: #d93636;
-}
-
-.dot.future {
-    background: #eee;
-}
+.dot.green { background: #2baa45; }
+.dot.red { background: #d93636; }
+.dot.future { background: #eee; }
 
 .progress-label {
     margin-top: 16px;
@@ -189,9 +253,7 @@ button:hover {
     color: #888;
 }
 
-.graph-button {
-    margin-top: 16px;
-}
+.graph-button { margin-top: 16px; }
 
 /* TASKS */
 
@@ -208,9 +270,7 @@ button:hover {
     color: #fff;
 }
 
-.task-list {
-    flex: 1;
-}
+.task-list { flex: 1; }
 
 .empty {
     color: #777;
@@ -290,31 +350,6 @@ button:hover {
     color: #fff;
 }
 
-.form-group {
-    margin-bottom: 18px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 7px;
-    font-size: 14px;
-    color: #ccc;
-}
-
-input {
-    width: 100%;
-    padding: 11px;
-    border: 1px solid #444;
-    background: #111;
-    color: #eee;
-    border-radius: 6px;
-    font-size: 15px;
-}
-
-input:focus {
-    outline: 1px solid #777;
-}
-
 .modal-buttons {
     display: flex;
     justify-content: flex-end;
@@ -329,14 +364,17 @@ input:focus {
 }
 
 @media (max-width: 750px) {
-
-    .app {
-        padding: 25px 15px;
-    }
+    .app { padding: 25px 15px; }
 
     .topbar {
         align-items: flex-start;
         gap: 15px;
+    }
+
+    .topbar-right {
+        align-items: flex-end;
+        flex-direction: column;
+        gap: 8px;
     }
 
     .date {
@@ -344,38 +382,62 @@ input:focus {
         text-align: right;
     }
 
-    .layout {
-        grid-template-columns: 1fr;
-    }
+    .layout { grid-template-columns: 1fr; }
 
-    .tasks {
-        min-height: 500px;
-    }
+    .tasks { min-height: 500px; }
 
-    .timer {
-        font-size: 56px;
-    }
+    .timer { font-size: 56px; }
 }
 </style>
 </head>
 
 <body>
 
-<div class="app">
+<!-- AUTH SCREEN -->
+<div class="auth-screen" id="authScreen">
+    <div class="auth-box">
+        <div class="auth-logo">toDO</div>
+
+        <h2 id="authTitle">Log in</h2>
+
+        <form id="authForm">
+            <div class="form-group">
+                <label for="authEmail">Email</label>
+                <input id="authEmail" type="email" required autocomplete="email">
+            </div>
+
+            <div class="form-group">
+                <label for="authPassword">Password</label>
+                <input id="authPassword" type="password" required minlength="6" autocomplete="current-password">
+            </div>
+
+            <div class="auth-buttons">
+                <button class="primary" type="submit" id="authSubmit">Log in</button>
+                <button type="button" id="toggleAuth">Create account</button>
+            </div>
+        </form>
+
+        <div class="auth-message" id="authMessage"></div>
+    </div>
+</div>
+
+<!-- APP -->
+<div class="app" id="app" style="display:none;">
 
     <div class="topbar">
         <div class="logo">toDO</div>
-        <div class="date" id="currentDate"></div>
+
+        <div class="topbar-right">
+            <div class="date" id="currentDate"></div>
+            <button class="logout-button" id="logout">Log out</button>
+        </div>
     </div>
 
     <div class="layout">
 
         <div class="left">
 
-            <!-- POMODORO -->
-
             <div class="box pomodoro">
-
                 <h2>Pomodoro</h2>
 
                 <div class="mode" id="mode">Focus</div>
@@ -387,247 +449,263 @@ input:focus {
                 </div>
 
                 <div class="controls">
-
-                    <button
-                        class="primary"
-                        id="startPause"
-                    >
-                        Start
-                    </button>
-
-                    <button id="reset">
-                        Reset
-                    </button>
-
+                    <button class="primary" id="startPause">Start</button>
+                    <button id="reset">Reset</button>
                 </div>
 
-                <button
-                    class="settings-button"
-                    id="openSettings"
-                >
+                <button class="settings-button" id="openSettings">
                     Session settings
                 </button>
 
-                <div
-                    class="session-info"
-                    id="sessionInfo"
-                ></div>
-
+                <div class="session-info" id="sessionInfo"></div>
             </div>
 
-
-            <!-- 30 DAY PROGRESS -->
-
             <div class="box progress-box">
+                <div class="progress-dots" id="progressDots"></div>
 
-                <div
-                    class="progress-dots"
-                    id="progressDots"
-                ></div>
+                <div class="progress-label" id="progressLabel"></div>
 
-                <div
-                    class="progress-label"
-                    id="progressLabel"
-                ></div>
-
-                <button
-                    class="graph-button"
-                    id="openGraph"
-                >
+                <button class="graph-button" id="openGraph">
                     Progress graph
                 </button>
-
             </div>
 
         </div>
 
-
-        <!-- TASKS -->
-
         <div class="box tasks">
-
             <h2>Tasks for today</h2>
 
-            <div
-                class="task-list"
-                id="taskList"
-            ></div>
+            <div class="task-list" id="taskList"></div>
 
-            <button
-                class="primary add-task"
-                id="openTaskModal"
-            >
+            <button class="primary add-task" id="openTaskModal">
                 Add task
             </button>
-
         </div>
 
     </div>
-
 </div>
 
-
 <!-- ADD TASK -->
-
-<div
-    class="modal"
-    id="taskModal"
->
-
+<div class="modal" id="taskModal">
     <div class="modal-content">
-
         <h2>Add task</h2>
 
         <form id="taskForm">
-
             <div class="form-group">
-
-                <label for="taskName">
-                    Task
-                </label>
-
-                <input
-                    id="taskName"
-                    required
-                    autocomplete="off"
-                >
-
+                <label for="taskName">Task</label>
+                <input id="taskName" required autocomplete="off">
             </div>
 
             <div class="form-group">
-
-                <label for="taskDeadline">
-                    Deadline
-                </label>
-
-                <input
-                    id="taskDeadline"
-                    type="datetime-local"
-                >
-
+                <label for="taskDeadline">Deadline</label>
+                <input id="taskDeadline" type="datetime-local">
             </div>
 
             <div class="modal-buttons">
-
-                <button
-                    type="button"
-                    id="cancelTask"
-                >
-                    Cancel
-                </button>
-
-                <button
-                    class="primary"
-                    type="submit"
-                >
-                    Add task
-                </button>
-
+                <button type="button" id="cancelTask">Cancel</button>
+                <button class="primary" type="submit">Add task</button>
             </div>
-
         </form>
-
     </div>
-
 </div>
 
-
 <!-- SESSION SETTINGS -->
-
-<div
-    class="modal"
-    id="settingsModal"
->
-
+<div class="modal" id="settingsModal">
     <div class="modal-content">
-
         <h2>Session settings</h2>
 
         <form id="settingsForm">
-
             <div class="settings-grid">
-
                 <div class="form-group">
-
-                    <label for="focusMinutes">
-                        Focus minutes
-                    </label>
-
-                    <input
-                        id="focusMinutes"
-                        type="number"
-                        min="1"
-                        max="180"
-                        required
-                    >
-
+                    <label for="focusMinutes">Focus minutes</label>
+                    <input id="focusMinutes" type="number" min="1" max="180" required>
                 </div>
 
                 <div class="form-group">
-
-                    <label for="breakMinutes">
-                        Break minutes
-                    </label>
-
-                    <input
-                        id="breakMinutes"
-                        type="number"
-                        min="1"
-                        max="60"
-                        required
-                    >
-
+                    <label for="breakMinutes">Break minutes</label>
+                    <input id="breakMinutes" type="number" min="1" max="60" required>
                 </div>
-
             </div>
 
             <div class="modal-buttons">
-
-                <button
-                    type="button"
-                    id="cancelSettings"
-                >
-                    Cancel
-                </button>
-
-                <button
-                    class="primary"
-                    type="submit"
-                >
-                    Save
-                </button>
-
+                <button type="button" id="cancelSettings">Cancel</button>
+                <button class="primary" type="submit">Save</button>
             </div>
-
         </form>
-
     </div>
-
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
+/* ---------------- SUPABASE ---------------- */
 
-const STORAGE_KEY = "todo_dashboard_v3";
+const SUPABASE_URL = "https://xyvvxpddvuhnyiagdeh.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_JWP2PqKxB-NuZiOW3B0hZA_odJdw1Ys";
+
+const { createClient } = supabase;
+
+const db = createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+);
+
+let currentUser = null;
+
+
+/* ---------------- DATA ---------------- */
+
+let data = {
+    tasks: [],
+    sessions: [],
+    dailyTotals: {},
+    settings: {
+        focus: 25,
+        break: 5
+    }
+};
+
+
+/* ---------------- AUTH ---------------- */
+
+let authMode = "login";
+
+const authScreen = document.getElementById("authScreen");
+const app = document.getElementById("app");
+const authTitle = document.getElementById("authTitle");
+const authSubmit = document.getElementById("authSubmit");
+const toggleAuth = document.getElementById("toggleAuth");
+const authMessage = document.getElementById("authMessage");
+
+
+toggleAuth.addEventListener("click", () => {
+    authMode = authMode === "login" ? "signup" : "login";
+
+    if (authMode === "login") {
+        authTitle.textContent = "Log in";
+        authSubmit.textContent = "Log in";
+        toggleAuth.textContent = "Create account";
+    } else {
+        authTitle.textContent = "Create account";
+        authSubmit.textContent = "Create account";
+        toggleAuth.textContent = "Back to login";
+    }
+
+    authMessage.textContent = "";
+});
+
+
+document.getElementById("authForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById("authEmail").value.trim();
+    const password = document.getElementById("authPassword").value;
+
+    authSubmit.disabled = true;
+    authMessage.textContent = "Please wait...";
+
+    try {
+        if (authMode === "login") {
+            const { error } = await db.auth.signInWithPassword({
+                email,
+                password
+            });
+
+            if (error) throw error;
+
+        } else {
+            const { data: signUpData, error } = await db.auth.signUp({
+                email,
+                password
+            });
+
+            if (error) throw error;
+
+            if (!signUpData.session) {
+                authMessage.textContent =
+                    "Account created. Check your email to confirm your account, then log in.";
+            }
+        }
+
+    } catch (error) {
+        authMessage.textContent = error.message;
+    } finally {
+        authSubmit.disabled = false;
+    }
+});
+
+
+document.getElementById("logout").addEventListener("click", async () => {
+    clearInterval(interval);
+
+    await db.auth.signOut();
+
+    currentUser = null;
+    app.style.display = "none";
+    authScreen.style.display = "flex";
+    document.getElementById("authPassword").value = "";
+    authMessage.textContent = "";
+});
+
+
+async function handleAuth() {
+
+    const { data: sessionData } = await db.auth.getSession();
+
+    if (sessionData.session) {
+        await showApp(sessionData.session.user);
+    } else {
+        showLogin();
+    }
+
+    db.auth.onAuthStateChange(async (event, session) => {
+
+        if (event === "SIGNED_IN" && session) {
+            await showApp(session.user);
+        }
+
+        if (event === "SIGNED_OUT") {
+            showLogin();
+        }
+    });
+}
+
+
+function showLogin() {
+    currentUser = null;
+    app.style.display = "none";
+    authScreen.style.display = "flex";
+}
+
+
+async function showApp(user) {
+
+    currentUser = user;
+
+    authScreen.style.display = "none";
+    app.style.display = "block";
+
+    await loadCloudData();
+}
 
 
 /* ---------------- DATE ---------------- */
 
 function getToday() {
-
     const d = new Date();
 
-    return d.toISOString().slice(0, 10);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
 }
 
 
 function formatDate(dateString) {
 
-    const [
-        year,
-        month,
-        day
-    ] = dateString.split("-").map(Number);
+    const [year, month, day] =
+        dateString.split("-").map(Number);
 
     return new Date(
         year,
@@ -645,71 +723,116 @@ function formatDate(dateString) {
 }
 
 
-document.getElementById(
-    "currentDate"
-).textContent =
+document.getElementById("currentDate").textContent =
     formatDate(getToday());
 
 
-/* ---------------- DATA ---------------- */
+/* ---------------- CLOUD DATA ---------------- */
 
-let data = JSON.parse(
-    localStorage.getItem(STORAGE_KEY)
-    || "null"
-);
+async function loadCloudData() {
 
-if (!data) {
+    if (!currentUser) return;
 
-    data = {
+    try {
 
-        tasks: [],
+        const [
+            tasksResult,
+            sessionsResult,
+            totalsResult,
+            settingsResult
+        ] = await Promise.all([
 
-        sessions: [],
+            db.from("tasks")
+                .select("*")
+                .eq("user_id", currentUser.id),
 
-        dailyTotals: {},
+            db.from("sessions")
+                .select("*")
+                .eq("user_id", currentUser.id)
+                .order("completed_at", { ascending: true }),
 
-        settings: {
+            db.from("daily_totals")
+                .select("*")
+                .eq("user_id", currentUser.id),
 
-            focus: 25,
+            db.from("settings")
+                .select("*")
+                .eq("user_id", currentUser.id)
+                .maybeSingle()
+        ]);
 
-            break: 5
 
+        if (tasksResult.error) throw tasksResult.error;
+        if (sessionsResult.error) throw sessionsResult.error;
+        if (totalsResult.error) throw totalsResult.error;
+        if (settingsResult.error) throw settingsResult.error;
+
+
+        data.tasks = tasksResult.data.map(task => ({
+            id: task.id,
+            name: task.name,
+            date: task.date,
+            deadline: task.deadline,
+            completed: task.completed,
+            completedAt: task.completed_at
+        }));
+
+
+        data.sessions = sessionsResult.data.map(session => ({
+            id: session.id,
+            date: session.date,
+            completedAt: session.completed_at,
+            taskId: session.task_id,
+            pauses: session.pauses,
+            focusMinutes: session.focus_minutes
+        }));
+
+
+        data.dailyTotals = {};
+
+        totalsResult.data.forEach(row => {
+            data.dailyTotals[row.date] = row.total_minutes;
+        });
+
+
+        if (settingsResult.data) {
+
+            data.settings.focus =
+                settingsResult.data.focus_minutes;
+
+            data.settings.break =
+                settingsResult.data.break_minutes;
+
+        } else {
+
+            await db.from("settings").insert({
+                user_id: currentUser.id,
+                focus_minutes: 25,
+                break_minutes: 5
+            });
         }
 
-    };
-}
 
+        renderTasks();
+        renderProgress();
+        renderSessionInfo();
 
-if (!data.tasks) {
-    data.tasks = [];
-}
+        clearInterval(interval);
 
-if (!data.sessions) {
-    data.sessions = [];
-}
+        mode = "focus";
+        running = false;
+        remainingSeconds = data.settings.focus * 60;
+        currentSessionPauses = 0;
 
-if (!data.dailyTotals) {
-    data.dailyTotals = {};
-}
+        document.getElementById("mode").textContent = "Focus";
+        document.getElementById("startPause").textContent = "Start";
 
-if (!data.settings) {
+        updateTimer();
 
-    data.settings = {
+    } catch (error) {
 
-        focus: 25,
-
-        break: 5
-
-    };
-}
-
-
-function save() {
-
-    localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(data)
-    );
+        alert("Could not load your cloud data: " + error.message);
+    }
 }
 
 
@@ -717,62 +840,42 @@ function save() {
 
 function renderTasks() {
 
-    const list =
-        document.getElementById(
-            "taskList"
-        );
+    const list = document.getElementById("taskList");
 
     list.innerHTML = "";
 
     const todaysTasks =
-        data.tasks.filter(
-            task =>
-                task.date === getToday()
-        );
+        data.tasks.filter(task => task.date === getToday());
 
     if (todaysTasks.length === 0) {
-
         list.innerHTML =
             '<div class="empty">No tasks today.</div>';
-
         return;
     }
 
+
     todaysTasks.forEach(task => {
 
-        const row =
-            document.createElement("div");
+        const row = document.createElement("div");
 
         row.className =
-            "task"
-            +
-            (
-                task.completed
-                    ? " completed"
-                    : ""
-            );
+            "task" +
+            (task.completed ? " completed" : "");
 
 
-        const name =
-            document.createElement("div");
+        const name = document.createElement("div");
 
-        name.className =
-            "task-name";
-
-        name.textContent =
-            task.name;
+        name.className = "task-name";
+        name.textContent = task.name;
 
 
-        const deadline =
-            document.createElement("div");
+        const deadline = document.createElement("div");
 
-        deadline.className =
-            "deadline";
+        deadline.className = "deadline";
 
         if (task.deadline) {
 
-            const date =
-                new Date(task.deadline);
+            const date = new Date(task.deadline);
 
             deadline.textContent =
                 date.toLocaleTimeString(
@@ -785,106 +888,97 @@ function renderTasks() {
         }
 
 
-        const actions =
-            document.createElement("div");
+        const actions = document.createElement("div");
 
-        actions.className =
-            "task-actions";
+        actions.className = "task-actions";
 
 
-        const complete =
-            document.createElement("button");
+        const complete = document.createElement("button");
 
-        complete.className =
-            "small-button";
+        complete.className = "small-button";
 
         complete.textContent =
-            task.completed
-                ? "Undo"
-                : "Done";
+            task.completed ? "Undo" : "Done";
 
-        complete.addEventListener(
-            "click",
-            () => {
+        complete.addEventListener("click", async () => {
 
-                task.completed =
-                    !task.completed;
+            const newCompleted = !task.completed;
 
-                task.completedAt =
-                    task.completed
-                        ? new Date().toISOString()
-                        : null;
+            const { error } =
+                await db.from("tasks")
+                    .update({
+                        completed: newCompleted,
+                        completed_at:
+                            newCompleted
+                                ? new Date().toISOString()
+                                : null
+                    })
+                    .eq("id", task.id)
+                    .eq("user_id", currentUser.id);
 
-                save();
-
-                renderTasks();
+            if (error) {
+                alert(error.message);
+                return;
             }
-        );
+
+            task.completed = newCompleted;
+            task.completedAt =
+                newCompleted
+                    ? new Date().toISOString()
+                    : null;
+
+            renderTasks();
+        });
 
 
-        const pomo =
-            document.createElement("button");
+        const pomo = document.createElement("button");
 
-        pomo.className =
-            "small-button";
+        pomo.className = "small-button";
+        pomo.textContent = "T";
+        pomo.title = "Use this task for Pomodoro";
 
-        pomo.textContent =
-            "T";
+        pomo.addEventListener("click", () => {
 
-        pomo.title =
-            "Use this task for Pomodoro";
+            selectedTask = task;
 
-        pomo.addEventListener(
-            "click",
-            () => {
+            document.getElementById("selectedTask").textContent =
+                task.name;
+        });
 
-                selectedTask = task;
 
-                document.getElementById(
-                    "selectedTask"
-                ).textContent =
-                    task.name;
+        const del = document.createElement("button");
+
+        del.className = "small-button";
+        del.textContent = "Delete";
+
+        del.addEventListener("click", async () => {
+
+            const { error } =
+                await db.from("tasks")
+                    .delete()
+                    .eq("id", task.id)
+                    .eq("user_id", currentUser.id);
+
+            if (error) {
+                alert(error.message);
+                return;
             }
-        );
 
+            data.tasks =
+                data.tasks.filter(x => x.id !== task.id);
 
-        const del =
-            document.createElement("button");
+            if (
+                selectedTask &&
+                selectedTask.id === task.id
+            ) {
+                selectedTask = null;
 
-        del.className =
-            "small-button";
-
-        del.textContent =
-            "Delete";
-
-        del.addEventListener(
-            "click",
-            () => {
-
-                data.tasks =
-                    data.tasks.filter(
-                        x =>
-                            x.id !== task.id
-                    );
-
-                if (
-                    selectedTask &&
-                    selectedTask.id === task.id
-                ) {
-
-                    selectedTask = null;
-
-                    document.getElementById(
-                        "selectedTask"
-                    ).textContent =
-                        "No task selected";
-                }
-
-                save();
-
-                renderTasks();
+                document.getElementById("selectedTask").textContent =
+                    "No task selected";
             }
-        );
+
+            renderTasks();
+        });
 
 
         actions.append(
@@ -900,91 +994,79 @@ function renderTasks() {
         );
 
         list.appendChild(row);
-
     });
 }
 
 
 /* ---------------- ADD TASK ---------------- */
 
-document.getElementById(
-    "openTaskModal"
-).addEventListener(
+document.getElementById("openTaskModal").addEventListener(
     "click",
     () => {
 
-        document.getElementById(
-            "taskModal"
-        ).classList.add("open");
+        document.getElementById("taskModal").classList.add("open");
 
-        document.getElementById(
-            "taskName"
-        ).focus();
+        document.getElementById("taskName").focus();
     }
 );
 
 
-document.getElementById(
-    "cancelTask"
-).addEventListener(
+document.getElementById("cancelTask").addEventListener(
     "click",
     () => {
-
-        document.getElementById(
-            "taskModal"
-        ).classList.remove("open");
+        document.getElementById("taskModal").classList.remove("open");
     }
 );
 
 
-document.getElementById(
-    "taskForm"
-).addEventListener(
+document.getElementById("taskForm").addEventListener(
     "submit",
-    e => {
+    async (e) => {
 
         e.preventDefault();
 
         const name =
-            document.getElementById(
-                "taskName"
-            ).value.trim();
+            document.getElementById("taskName").value.trim();
 
         const deadline =
-            document.getElementById(
-                "taskDeadline"
-            ).value;
+            document.getElementById("taskDeadline").value;
 
         if (!name) return;
 
+
+        const { data: insertedTask, error } =
+            await db.from("tasks")
+                .insert({
+                    user_id: currentUser.id,
+                    name,
+                    date: getToday(),
+                    deadline: deadline || null,
+                    completed: false,
+                    completed_at: null
+                })
+                .select()
+                .single();
+
+
+        if (error) {
+            alert(error.message);
+            return;
+        }
+
+
         data.tasks.push({
-
-            id:
-                Date.now().toString(),
-
-            name,
-
-            date:
-                getToday(),
-
-            deadline:
-                deadline || null,
-
-            completed:
-                false,
-
-            completedAt:
-                null
-
+            id: insertedTask.id,
+            name: insertedTask.name,
+            date: insertedTask.date,
+            deadline: insertedTask.deadline,
+            completed: insertedTask.completed,
+            completedAt: insertedTask.completed_at
         });
 
-        save();
 
         e.target.reset();
 
-        document.getElementById(
-            "taskModal"
-        ).classList.remove("open");
+        document.getElementById("taskModal").classList.remove("open");
 
         renderTasks();
     }
@@ -994,46 +1076,25 @@ document.getElementById(
 /* ---------------- POMODORO ---------------- */
 
 let mode = "focus";
-
 let running = false;
-
 let selectedTask = null;
-
-let remainingSeconds =
-    data.settings.focus * 60;
-
+let remainingSeconds = data.settings.focus * 60;
 let interval = null;
-
 let currentSessionPauses = 0;
 
 
 function updateTimer() {
 
     const minutes =
-        Math.floor(
-            remainingSeconds / 60
-        );
+        Math.floor(remainingSeconds / 60);
 
     const seconds =
         remainingSeconds % 60;
 
-    document.getElementById(
-        "timer"
-    ).textContent =
-
-        String(minutes).padStart(
-            2,
-            "0"
-        )
-
+    document.getElementById("timer").textContent =
+        String(minutes).padStart(2, "0")
         + ":"
-
-        +
-
-        String(seconds).padStart(
-            2,
-            "0"
-        );
+        + String(seconds).padStart(2, "0");
 }
 
 
@@ -1043,40 +1104,28 @@ function startTimer() {
 
     running = true;
 
-    document.getElementById(
-        "startPause"
-    ).textContent =
+    document.getElementById("startPause").textContent =
         "Pause";
 
-    interval =
-        setInterval(
-            () => {
+    interval = setInterval(() => {
 
-                remainingSeconds--;
+        remainingSeconds--;
 
-                updateTimer();
+        updateTimer();
 
-                if (
-                    remainingSeconds <= 0
-                ) {
+        if (remainingSeconds <= 0) {
 
-                    clearInterval(
-                        interval
-                    );
+            clearInterval(interval);
 
-                    running = false;
+            running = false;
 
-                    document.getElementById(
-                        "startPause"
-                    ).textContent =
-                        "Start";
+            document.getElementById("startPause").textContent =
+                "Start";
 
-                    finishTimer();
-                }
+            finishTimer();
+        }
 
-            },
-            1000
-        );
+    }, 1000);
 }
 
 
@@ -1090,69 +1139,73 @@ function pauseTimer() {
 
     currentSessionPauses++;
 
-    document.getElementById(
-        "startPause"
-    ).textContent =
+    document.getElementById("startPause").textContent =
         "Start";
 
     renderSessionInfo();
 }
 
 
-function finishTimer() {
+async function finishTimer() {
 
     if (mode === "focus") {
-
-        /*
-            Only a FULLY COMPLETED focus session
-            gets added to the cumulative time.
-        */
 
         const sessionMinutes =
             Number(data.settings.focus);
 
-        const date =
-            getToday();
+        const date = getToday();
 
-        if (!data.dailyTotals[date]) {
 
-            data.dailyTotals[date] = 0;
+        const { data: insertedSession, error: sessionError } =
+            await db.from("sessions")
+                .insert({
+                    user_id: currentUser.id,
+                    date,
+                    completed_at: new Date().toISOString(),
+                    task_id: selectedTask ? selectedTask.id : null,
+                    pauses: currentSessionPauses,
+                    focus_minutes: sessionMinutes
+                })
+                .select()
+                .single();
+
+
+        if (sessionError) {
+            alert("Session could not be saved: " + sessionError.message);
+            return;
         }
 
-        data.dailyTotals[date] +=
-            sessionMinutes;
+
+        const newTotal =
+            (Number(data.dailyTotals[date]) || 0)
+            + sessionMinutes;
 
 
-        /*
-            Keep the individual session record
-            for pause history and the graph.
-        */
+        const { error: totalError } =
+            await db.from("daily_totals")
+                .upsert({
+                    user_id: currentUser.id,
+                    date,
+                    total_minutes: newTotal
+                });
+
+
+        if (totalError) {
+            alert("Progress could not be saved: " + totalError.message);
+            return;
+        }
+
 
         data.sessions.push({
-
-            id:
-                Date.now().toString(),
-
-            date:
-                date,
-
-            completedAt:
-                new Date().toISOString(),
-
-            taskId:
-                selectedTask
-                    ? selectedTask.id
-                    : null,
-
-            pauses:
-                currentSessionPauses,
-
-            focusMinutes:
-                sessionMinutes
-
+            id: insertedSession.id,
+            date,
+            completedAt: insertedSession.completed_at,
+            taskId: selectedTask ? selectedTask.id : null,
+            pauses: currentSessionPauses,
+            focusMinutes: sessionMinutes
         });
 
-        save();
+        data.dailyTotals[date] = newTotal;
 
         currentSessionPauses = 0;
 
@@ -1161,13 +1214,10 @@ function finishTimer() {
         remainingSeconds =
             data.settings.break * 60;
 
-        document.getElementById(
-            "mode"
-        ).textContent =
+        document.getElementById("mode").textContent =
             "Break";
 
         renderProgress();
-
         renderSessionInfo();
 
     } else {
@@ -1177,9 +1227,7 @@ function finishTimer() {
         remainingSeconds =
             data.settings.focus * 60;
 
-        document.getElementById(
-            "mode"
-        ).textContent =
+        document.getElementById("mode").textContent =
             "Focus";
     }
 
@@ -1187,28 +1235,20 @@ function finishTimer() {
 }
 
 
-document.getElementById(
-    "startPause"
-).addEventListener(
+document.getElementById("startPause").addEventListener(
     "click",
     () => {
 
         if (running) {
-
             pauseTimer();
-
         } else {
-
             startTimer();
-
         }
     }
 );
 
 
-document.getElementById(
-    "reset"
-).addEventListener(
+document.getElementById("reset").addEventListener(
     "click",
     () => {
 
@@ -1223,18 +1263,13 @@ document.getElementById(
 
         currentSessionPauses = 0;
 
-        document.getElementById(
-            "mode"
-        ).textContent =
+        document.getElementById("mode").textContent =
             "Focus";
 
-        document.getElementById(
-            "startPause"
-        ).textContent =
+        document.getElementById("startPause").textContent =
             "Start";
 
         updateTimer();
-
         renderSessionInfo();
     }
 );
@@ -1244,15 +1279,11 @@ document.getElementById(
 
 function renderSessionInfo() {
 
-    const box =
-        document.getElementById(
-            "sessionInfo"
-        );
+    const box = document.getElementById("sessionInfo");
 
     const sessions =
         data.sessions.filter(
-            session =>
-                session.date === getToday()
+            session => session.date === getToday()
         );
 
     if (sessions.length === 0) {
@@ -1266,74 +1297,49 @@ function renderSessionInfo() {
     box.innerHTML =
         `<div><strong>Today's completed sessions:</strong> ${sessions.length}</div>`
         +
-        sessions
-            .map(
-                (session, index) =>
-                    `<div>Session ${index + 1} — ${session.pauses} pauses</div>`
-            )
-            .join("");
+        sessions.map(
+            (session, index) =>
+                `<div>Session ${index + 1} — ${session.pauses} pauses</div>`
+        ).join("");
 }
 
 
 /* ---------------- SETTINGS ---------------- */
 
-document.getElementById(
-    "openSettings"
-).addEventListener(
+document.getElementById("openSettings").addEventListener(
     "click",
     () => {
 
-        document.getElementById(
-            "focusMinutes"
-        ).value =
+        document.getElementById("focusMinutes").value =
             data.settings.focus;
 
-        document.getElementById(
-            "breakMinutes"
-        ).value =
+        document.getElementById("breakMinutes").value =
             data.settings.break;
 
-        document.getElementById(
-            "settingsModal"
-        ).classList.add("open");
+        document.getElementById("settingsModal").classList.add("open");
     }
 );
 
 
-document.getElementById(
-    "cancelSettings"
-).addEventListener(
+document.getElementById("cancelSettings").addEventListener(
     "click",
     () => {
-
-        document.getElementById(
-            "settingsModal"
-        ).classList.remove("open");
+        document.getElementById("settingsModal").classList.remove("open");
     }
 );
 
 
-document.getElementById(
-    "settingsForm"
-).addEventListener(
+document.getElementById("settingsForm").addEventListener(
     "submit",
-    e => {
+    async (e) => {
 
         e.preventDefault();
 
         const focus =
-            Number(
-                document.getElementById(
-                    "focusMinutes"
-                ).value
-            );
+            Number(document.getElementById("focusMinutes").value);
 
         const breakTime =
-            Number(
-                document.getElementById(
-                    "breakMinutes"
-                ).value
-            );
+            Number(document.getElementById("breakMinutes").value);
 
         if (
             !Number.isFinite(focus) ||
@@ -1344,39 +1350,41 @@ document.getElementById(
             return;
         }
 
-        data.settings.focus =
-            focus;
 
-        data.settings.break =
-            breakTime;
+        const { error } =
+            await db.from("settings")
+                .upsert({
+                    user_id: currentUser.id,
+                    focus_minutes: focus,
+                    break_minutes: breakTime
+                });
 
-        save();
+
+        if (error) {
+            alert(error.message);
+            return;
+        }
+
+
+        data.settings.focus = focus;
+        data.settings.break = breakTime;
 
         clearInterval(interval);
 
         running = false;
-
         mode = "focus";
 
-        remainingSeconds =
-            focus * 60;
+        remainingSeconds = focus * 60;
 
-        document.getElementById(
-            "mode"
-        ).textContent =
+        document.getElementById("mode").textContent =
             "Focus";
 
-        document.getElementById(
-            "startPause"
-        ).textContent =
+        document.getElementById("startPause").textContent =
             "Start";
 
-        document.getElementById(
-            "settingsModal"
-        ).classList.remove("open");
+        document.getElementById("settingsModal").classList.remove("open");
 
         updateTimer();
-
         renderProgress();
     }
 );
@@ -1384,131 +1392,72 @@ document.getElementById(
 
 /* ---------------- 30 DAY PROGRESS ---------------- */
 
-function dateAfter(
-    dateString,
-    numberOfDays
-) {
+function dateAfter(dateString, numberOfDays) {
 
-    const parts =
-        dateString
-            .split("-")
-            .map(Number);
+    const [year, month, day] =
+        dateString.split("-").map(Number);
 
     const date =
         new Date(
-            parts[0],
-            parts[1] - 1,
-            parts[2]
+            year,
+            month - 1,
+            day
         );
 
-    date.setDate(
-        date.getDate() + numberOfDays
-    );
+    date.setDate(date.getDate() + numberOfDays);
 
-    return date.toISOString().slice(0, 10);
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, "0");
+    const d = String(date.getDate()).padStart(2, "0");
+
+    return `${y}-${m}-${d}`;
 }
 
 
 function renderProgress() {
 
     const container =
-        document.getElementById(
-            "progressDots"
-        );
+        document.getElementById("progressDots");
 
     container.innerHTML = "";
 
-    const startDate =
-        getToday();
+    const startDate = getToday();
 
 
-    /*
-        30 dots:
-
-        Dot 1  = today
-        Dot 2  = tomorrow
-        ...
-        Dot 30 = 29 days from today
-    */
-
-    for (
-        let i = 0;
-        i < 30;
-        i++
-    ) {
+    for (let i = 0; i < 30; i++) {
 
         const date =
-            dateAfter(
-                startDate,
-                i
-            );
+            dateAfter(startDate, i);
 
         const dot =
-            document.createElement(
-                "div"
-            );
+            document.createElement("div");
 
-        dot.className =
-            "dot";
+        dot.className = "dot";
 
-
-        /*
-            Future day = black
-        */
 
         if (date > startDate) {
 
-            dot.classList.add(
-                "future"
-            );
+            dot.classList.add("future");
 
         } else {
 
-            /*
-                Get the actual cumulative
-                completed focus time for this day.
-            */
-
             const totalMinutes =
-                Number(
-                    data.dailyTotals[date]
-                ) || 0;
+                Number(data.dailyTotals[date]) || 0;
 
 
-            /*
-                8 hours = 480 minutes
-            */
-
-            if (
-                totalMinutes >= 480
-            ) {
-
-                dot.classList.add(
-                    "green"
-                );
-
+            if (totalMinutes >= 480) {
+                dot.classList.add("green");
             } else {
-
-                dot.classList.add(
-                    "red"
-                );
+                dot.classList.add("red");
             }
         }
 
 
-        /*
-            Show the day's total on hover.
-        */
-
         const totalMinutes =
-            Number(
-                data.dailyTotals[date]
-            ) || 0;
+            Number(data.dailyTotals[date]) || 0;
 
         const hours =
-            Math.floor(
-                totalMinutes / 60
-            );
+            Math.floor(totalMinutes / 60);
 
         const minutes =
             totalMinutes % 60;
@@ -1520,55 +1469,42 @@ function renderProgress() {
     }
 
 
-    /*
-        Today's total
-    */
-
     const todayMinutes =
-        Number(
-            data.dailyTotals[startDate]
-        ) || 0;
+        Number(data.dailyTotals[startDate]) || 0;
 
     const todayHours =
-        Math.floor(
-            todayMinutes / 60
-        );
+        Math.floor(todayMinutes / 60);
 
     const todayRemainingMinutes =
         todayMinutes % 60;
 
-    document.getElementById(
-        "progressLabel"
-    ).textContent =
+    document.getElementById("progressLabel").textContent =
         `Today: ${todayHours}h ${todayRemainingMinutes}m / 8h`;
 }
 
 
 /* ---------------- GRAPH ---------------- */
 
-document.getElementById(
-    "openGraph"
-).addEventListener(
+document.getElementById("openGraph").addEventListener(
     "click",
     () => {
-
-        window.location.href =
-            "graph.html";
+        window.location.href = "graph.html";
     }
 );
 
 
-/* ---------------- INITIALIZE ---------------- */
+/* ---------------- START ---------------- */
 
-renderTasks();
-
-renderProgress();
-
-renderSessionInfo();
-
-updateTimer();
+handleAuth();
 
 </script>
 
 </body>
 </html>
+'''
+
+path = Path("/mnt/data/index_supabase.html")
+path.write_text(html, encoding="utf-8")
+
+print(f"Created: {path}")
+print(f"Size: {path.stat().st_size:,} bytes")
