@@ -1,549 +1,1424 @@
-html = r'''<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>toDO Dashboard</title>
-<style>
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background: #f4f4f5;
-    color: #18181b;
-  }
-  button, input, select { font: inherit; }
-  button { cursor: pointer; }
-  .app {
-    max-width: 1100px;
-    margin: 30px auto;
-    padding: 18px;
-  }
-  header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 15px;
-    margin-bottom: 18px;
-  }
-  h1 { margin: 0; font-size: 28px; }
-  .date { color: #71717a; }
-  .grid {
-    display: grid;
-    grid-template-columns: 1fr 1.25fr;
-    gap: 18px;
-  }
-  .left, .right { display: flex; flex-direction: column; gap: 18px; }
-  .card {
-    background: white;
-    border: 1px solid #d4d4d8;
-    border-radius: 14px;
-    padding: 20px;
-    box-shadow: 0 2px 8px rgba(0,0,0,.04);
-  }
-  .card h2 {
-    margin: 0 0 16px;
-    font-size: 18px;
-  }
 
-  /* Timer */
-  .timer { text-align: center; }
-  .timer-mode { color: #71717a; margin-bottom: 6px; }
-  .time {
-    font-size: 64px;
-    font-variant-numeric: tabular-nums;
+<title>toDO Dashboard</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #f4f4f4;
+    color: #171717;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.app {
+    width: min(1100px, 94vw);
+    margin: 35px auto;
+}
+
+/* HEADER */
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.logo {
+    font-size: 30px;
     font-weight: 700;
-    letter-spacing: 2px;
-  }
-  .timer-task {
-    min-height: 24px;
-    color: #52525b;
-    margin-bottom: 14px;
-  }
-  .timer-controls { display: flex; justify-content: center; gap: 8px; }
-  .btn {
-    border: 1px solid #a1a1aa;
+}
+
+.date {
+    font-size: 16px;
+    color: #555;
+}
+
+/* MAIN LAYOUT */
+
+.main {
+    display: grid;
+    grid-template-columns: 1fr 1.15fr;
+    gap: 18px;
+}
+
+.left {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.box {
     background: white;
-    border-radius: 9px;
-    padding: 8px 14px;
-  }
-  .btn.primary {
-    background: #18181b;
+    border: 1px solid #bbb;
+    border-radius: 10px;
+    padding: 22px;
+}
+
+/* POMODORO */
+
+.pomodoro {
+    min-height: 300px;
+    text-align: center;
+}
+
+.pomodoro h2 {
+    margin: 0 0 15px;
+    font-size: 20px;
+}
+
+.timer {
+    font-size: 64px;
+    font-weight: 700;
+    margin: 15px 0 8px;
+    font-variant-numeric: tabular-nums;
+}
+
+.timer-mode {
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.timer-task {
+    min-height: 22px;
+    color: #444;
+    margin-bottom: 18px;
+}
+
+button {
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.btn {
+    background: white;
+    border: 1px solid #999;
+    border-radius: 6px;
+    padding: 9px 18px;
+    font-size: 14px;
+}
+
+.btn:hover {
+    background: #f0f0f0;
+}
+
+.btn-dark {
+    background: #171717;
     color: white;
-    border-color: #18181b;
-  }
-  .settings {
+    border-color: #171717;
+}
+
+.btn-dark:hover {
+    background: #333;
+}
+
+.timer-buttons {
     display: flex;
     justify-content: center;
     gap: 8px;
-    margin-top: 14px;
-    font-size: 13px;
-  }
-  .settings input {
-    width: 58px;
-    padding: 5px;
-    border: 1px solid #d4d4d8;
-    border-radius: 6px;
-  }
+}
 
-  /* Tasks */
-  .task-list { display: flex; flex-direction: column; gap: 9px; }
-  .task {
-    border: 1px solid #e4e4e7;
-    border-radius: 10px;
-    padding: 11px;
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 8px;
-  }
-  .task.done { opacity: .55; }
-  .task-title {
-    font-weight: 600;
-    word-break: break-word;
-  }
-  .task.done .task-title { text-decoration: line-through; }
-  .deadline { font-size: 13px; color: #71717a; margin-top: 4px; }
-  .overdue { color: #dc2626; font-weight: 600; }
-  .task-actions { display: flex; gap: 5px; align-items: center; }
-  .icon-btn {
-    border: 1px solid #d4d4d8;
-    background: white;
-    border-radius: 7px;
-    width: 32px;
-    height: 32px;
-  }
-  .add-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; margin-top: 12px; }
-  input[type="text"], input[type="datetime-local"] {
-    width: 100%;
-    border: 1px solid #d4d4d8;
-    border-radius: 8px;
-    padding: 9px;
-  }
-  .empty { color: #71717a; text-align: center; padding: 25px 5px; }
+/* PROGRESS */
 
-  /* Activity */
-  .activity-wrap { overflow-x: auto; }
-  .activity {
+.progress {
+    min-height: 150px;
+}
+
+.progress h2 {
+    margin: 0 0 18px;
+    font-size: 18px;
+}
+
+.activity {
     display: grid;
-    grid-template-columns: repeat(30, 16px);
+    grid-template-columns: repeat(30, 1fr);
     gap: 5px;
-    min-width: max-content;
-  }
-  .dot {
-    width: 16px;
-    height: 16px;
-    border-radius: 4px;
-    background: #e4e4e7;
-    border: 0;
-  }
-  .dot[data-level="1"] { background: #d9f99d; }
-  .dot[data-level="2"] { background: #a3e635; }
-  .dot[data-level="3"] { background: #65a30d; }
-  .dot[data-level="4"] { background: #3f6212; }
-  .activity-labels {
+    align-items: center;
+}
+
+.dot {
+    width: 100%;
+    aspect-ratio: 1;
+    min-width: 8px;
+    border-radius: 50%;
+    border: none;
+    background: #ddd;
+    padding: 0;
+}
+
+.dot.level1 {
+    background: #b9e6a1;
+}
+
+.dot.level2 {
+    background: #79d45b;
+}
+
+.dot.level3 {
+    background: #42b72c;
+}
+
+.dot.level4 {
+    background: #16820a;
+}
+
+.progress-labels {
     display: flex;
     justify-content: space-between;
-    color: #71717a;
+    color: #777;
     font-size: 12px;
-    margin-top: 7px;
-  }
+    margin-top: 8px;
+}
 
-  /* History */
-  .history {
+/* HISTORY */
+
+.history {
+    min-height: 170px;
+}
+
+.history h2 {
+    margin: 0 0 14px;
+    font-size: 18px;
+}
+
+.history-list {
+    max-height: 180px;
+    overflow-y: auto;
+}
+
+.history-day {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #eee;
+    padding: 8px 2px;
+    cursor: pointer;
+}
+
+.history-day:hover {
+    background: #f7f7f7;
+}
+
+.history-day span:last-child {
+    color: #777;
+    font-size: 13px;
+}
+
+/* TASKS */
+
+.tasks {
+    min-height: 590px;
     display: flex;
     flex-direction: column;
+}
+
+.tasks-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 25px;
+}
+
+.tasks-header h2 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.tasks-date {
+    color: #555;
+    font-size: 14px;
+}
+
+.task-list {
+    flex: 1;
+}
+
+.task-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 2px;
+    border-bottom: 1px solid #eee;
+}
+
+.task-number {
+    width: 24px;
+    color: #555;
+}
+
+.task-name {
+    flex: 1;
+    font-size: 16px;
+}
+
+.task-deadline {
+    color: #777;
+    font-size: 13px;
+    margin-right: 8px;
+}
+
+.task-row.done .task-name {
+    text-decoration: line-through;
+    color: #888;
+}
+
+.task-row.done .task-deadline {
+    color: #aaa;
+}
+
+.task-action {
+    border: 1px solid #bbb;
+    background: white;
+    width: 27px;
+    height: 27px;
+    border-radius: 4px;
+}
+
+.task-action:hover {
+    background: #eee;
+}
+
+.task-empty {
+    color: #777;
+    margin-top: 30px;
+}
+
+/* ADD TASK */
+
+.add-task {
+    margin-top: 25px;
+    align-self: flex-start;
+}
+
+.add-task button {
+    min-width: 130px;
+}
+
+/* MODAL */
+
+.modal-background {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal {
+    width: min(430px, 100%);
+    background: white;
+    border-radius: 10px;
+    padding: 25px;
+}
+
+.modal h2 {
+    margin-top: 0;
+}
+
+.field {
+    margin-bottom: 15px;
+}
+
+.field label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+
+.field input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #bbb;
+    border-radius: 6px;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
     gap: 8px;
-    max-height: 280px;
-    overflow-y: auto;
-  }
-  .history-day {
-    border: 1px solid #e4e4e7;
-    border-radius: 8px;
-    padding: 9px 11px;
-  }
-  .history-day strong { display: block; margin-bottom: 4px; }
-  .history-meta { font-size: 13px; color: #71717a; }
+    margin-top: 20px;
+}
 
-  .notice {
-    margin-top: 10px;
-    color: #71717a;
-    font-size: 12px;
-  }
+/* HISTORY MODAL */
 
-  @media (max-width: 750px) {
-    .app { margin: 10px auto; padding: 10px; }
-    .grid { grid-template-columns: 1fr; }
-    .time { font-size: 52px; }
-  }
+.history-task {
+    padding: 7px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.history-task.done {
+    color: #777;
+    text-decoration: line-through;
+}
+
+/* MOBILE */
+
+@media (max-width: 750px) {
+
+    .app {
+        width: 94vw;
+        margin: 18px auto;
+    }
+
+    .main {
+        grid-template-columns: 1fr;
+    }
+
+    .tasks {
+        min-height: 500px;
+    }
+
+    .timer {
+        min-height: 260px;
+    }
+
+    .timer {
+        font-size: 52px;
+    }
+
+    .activity {
+        gap: 3px;
+    }
+}
 </style>
 </head>
+
 <body>
+
 <div class="app">
-  <header>
-    <h1>toDO</h1>
-    <div class="date" id="todayDate"></div>
-  </header>
 
-  <div class="grid">
-    <div class="left">
-      <section class="card timer">
-        <h2>Pomodoro</h2>
-        <div class="timer-mode" id="timerMode">Focus</div>
-        <div class="time" id="timerDisplay">25:00</div>
-        <div class="timer-task" id="timerTask">No task selected</div>
-        <div class="timer-controls">
-          <button class="btn primary" id="startBtn">Start</button>
-          <button class="btn" id="resetBtn">Reset</button>
-        </div>
-        <div class="settings">
-          <label>Focus <input id="focusMin" type="number" min="1" value="25"></label>
-          <label>Break <input id="breakMin" type="number" min="1" value="5"></label>
-        </div>
-      </section>
+    <header>
+        <div class="logo">toDO</div>
+        <div class="date" id="currentDate"></div>
+    </header>
 
-      <section class="card">
-        <h2>Progress</h2>
-        <div class="activity-wrap">
-          <div class="activity" id="activity"></div>
-        </div>
-        <div class="activity-labels">
-          <span id="activityStart"></span>
-          <span>Today</span>
-        </div>
-        <div class="notice">Darker = more completed tasks that day.</div>
-      </section>
 
-      <section class="card">
-        <h2>History</h2>
-        <div class="history" id="history"></div>
-      </section>
+    <div class="main">
+
+        <!-- LEFT SIDE -->
+
+        <div class="left">
+
+            <!-- POMODORO -->
+
+            <section class="box pomodoro">
+
+                <h2>Pomodoro</h2>
+
+                <div class="timer-mode" id="timerMode">
+                    Focus
+                </div>
+
+                <div class="timer" id="timer">
+                    25:00
+                </div>
+
+                <div class="timer-task" id="timerTask">
+                    No task selected
+                </div>
+
+                <div class="timer-buttons">
+
+                    <button
+                        class="btn btn-dark"
+                        id="startTimer">
+                        Start
+                    </button>
+
+                    <button
+                        class="btn"
+                        id="resetTimer">
+                        Reset
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- PROGRESS -->
+
+            <section class="box progress">
+
+                <h2>Progress</h2>
+
+                <div
+                    class="activity"
+                    id="activity">
+                </div>
+
+                <div class="progress-labels">
+                    <span id="progressStart"></span>
+                    <span>Today</span>
+                </div>
+
+            </section>
+
+
+            <!-- HISTORY -->
+
+            <section class="box history">
+
+                <h2>History</h2>
+
+                <div
+                    class="history-list"
+                    id="historyList">
+                </div>
+
+            </section>
+
+        </div>
+
+
+        <!-- RIGHT SIDE -->
+
+        <section class="box tasks">
+
+            <div class="tasks-header">
+
+                <h2>Tasks for today</h2>
+
+                <div
+                    class="tasks-date"
+                    id="tasksDate">
+                </div>
+
+            </div>
+
+
+            <div
+                class="task-list"
+                id="taskList">
+            </div>
+
+
+            <div class="add-task">
+
+                <button
+                    class="btn btn-dark"
+                    id="openAddTask">
+                    Add task
+                </button>
+
+            </div>
+
+        </section>
+
     </div>
 
-    <div class="right">
-      <section class="card">
-        <h2>Tasks for today</h2>
-        <div class="task-list" id="taskList"></div>
-
-        <div class="add-row">
-          <input id="taskTitle" type="text" placeholder="New task...">
-          <input id="taskDeadline" type="datetime-local">
-        </div>
-        <button class="btn primary" id="addBtn" style="margin-top:8px;width:100%">Add task</button>
-      </section>
-    </div>
-  </div>
 </div>
 
+
+<!-- ADD TASK MODAL -->
+
+<div
+    class="modal-background"
+    id="addModal">
+
+    <div class="modal">
+
+        <h2>Add task</h2>
+
+        <div class="field">
+
+            <label for="taskName">
+                Task
+            </label>
+
+            <input
+                id="taskName"
+                type="text"
+                placeholder="What do you need to do?">
+
+        </div>
+
+
+        <div class="field">
+
+            <label for="taskDeadline">
+                Deadline
+            </label>
+
+            <input
+                id="taskDeadline"
+                type="datetime-local">
+
+        </div>
+
+
+        <div class="modal-buttons">
+
+            <button
+                class="btn"
+                id="cancelAdd">
+                Cancel
+            </button>
+
+            <button
+                class="btn btn-dark"
+                id="saveTask">
+                Add task
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- HISTORY MODAL -->
+
+<div
+    class="modal-background"
+    id="historyModal">
+
+    <div class="modal">
+
+        <h2 id="historyTitle"></h2>
+
+        <div id="historyTasks"></div>
+
+        <div class="modal-buttons">
+
+            <button
+                class="btn"
+                id="closeHistory">
+                Close
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
 <script>
-const STORAGE_KEY = "todo_dashboard_v1";
 
-let state = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{"tasks":[],"sessions":[]}');
+/* =========================================================
+   DATA
+========================================================= */
 
-function save() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+const STORAGE_KEY = "todo_dashboard_v2";
+
+let data = JSON.parse(
+    localStorage.getItem(STORAGE_KEY)
+    || '{"tasks":[],"pomodoros":[]}'
+);
+
+function saveData() {
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(data)
+    );
 }
 
-function todayKey(date = new Date()) {
-  const y = date.getFullYear();
-  const m = String(date.getMonth()+1).padStart(2,"0");
-  const d = String(date.getDate()).padStart(2,"0");
-  return `${y}-${m}-${d}`;
+
+/* =========================================================
+   DATE HELPERS
+========================================================= */
+
+function dateKey(date = new Date()) {
+
+    const year = date.getFullYear();
+
+    const month = String(
+        date.getMonth() + 1
+    ).padStart(2, "0");
+
+    const day = String(
+        date.getDate()
+    ).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
 }
+
 
 function formatDate(date) {
-  return date.toLocaleDateString(undefined, {day:"2-digit", month:"short", year:"numeric"});
+
+    return date.toLocaleDateString(
+        undefined,
+        {
+            day: "numeric",
+            month: "short",
+            year: "numeric"
+        }
+    );
 }
 
-function escapeHtml(s) {
-  return s.replace(/[&<>"']/g, c => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
-  }[c]));
+
+function formatTime(date) {
+
+    return date.toLocaleTimeString(
+        undefined,
+        {
+            hour: "numeric",
+            minute: "2-digit"
+        }
+    );
 }
 
-function render() {
-  const now = new Date();
-  document.getElementById("todayDate").textContent =
-    now.toLocaleDateString(undefined, {weekday:"long", day:"numeric", month:"long", year:"numeric"});
 
-  renderTasks();
-  renderActivity();
-  renderHistory();
+/* =========================================================
+   HEADER
+========================================================= */
+
+function renderDates() {
+
+    const today = new Date();
+
+    document.getElementById(
+        "currentDate"
+    ).textContent = today.toLocaleDateString(
+        undefined,
+        {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+            year: "numeric"
+        }
+    );
+
+    document.getElementById(
+        "tasksDate"
+    ).textContent = today.toLocaleDateString(
+        undefined,
+        {
+            day: "numeric",
+            month: "short",
+            year: "numeric"
+        }
+    );
 }
+
+
+/* =========================================================
+   TASKS
+========================================================= */
 
 function renderTasks() {
-  const list = document.getElementById("taskList");
-  const today = todayKey();
 
-  const tasks = state.tasks
-    .filter(t => t.createdDate === today)
-    .sort((a,b) => new Date(a.deadline) - new Date(b.deadline));
+    const list =
+        document.getElementById("taskList");
 
-  if (!tasks.length) {
-    list.innerHTML = '<div class="empty">No tasks for today 🎉</div>';
-    return;
-  }
+    const today = dateKey();
 
-  list.innerHTML = tasks.map(t => {
-    const deadline = new Date(t.deadline);
-    const overdue = !t.done && deadline < new Date();
-    const remaining = deadline - new Date();
-    let relative = "";
+    const tasks = data.tasks
+        .filter(task =>
+            task.createdDate === today
+        )
+        .sort(
+            (a, b) =>
+                new Date(a.deadline)
+                -
+                new Date(b.deadline)
+        );
 
-    if (!t.done) {
-      if (overdue) relative = "Overdue";
-      else {
-        const mins = Math.floor(remaining / 60000);
-        if (mins < 60) relative = `${mins}m remaining`;
-        else if (mins < 1440) relative = `${Math.floor(mins/60)}h ${mins%60}m remaining`;
-        else relative = `${Math.floor(mins/1440)}d remaining`;
-      }
-    } else {
-      relative = "Completed";
+    if (tasks.length === 0) {
+
+        list.innerHTML =
+            '<div class="task-empty">No tasks today.</div>';
+
+        return;
     }
 
-    return `
-      <div class="task ${t.done ? "done" : ""}">
-        <div>
-          <div class="task-title">${escapeHtml(t.title)}</div>
-          <div class="deadline ${overdue ? "overdue" : ""}">
-            ${deadline.toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"})}
-            · ${relative}
-          </div>
-        </div>
-        <div class="task-actions">
-          <button class="icon-btn" title="${t.done ? "Undo" : "Complete"}"
-                  onclick="toggleTask('${t.id}')">${t.done ? "↩" : "✓"}</button>
-          <button class="icon-btn" title="Use for Pomodoro"
-                  onclick="selectTimerTask('${t.id}')">🍅</button>
-          <button class="icon-btn" title="Delete"
-                  onclick="deleteTask('${t.id}')">×</button>
-        </div>
-      </div>`;
-  }).join("");
+    list.innerHTML = "";
+
+    tasks.forEach(
+        (task, index) => {
+
+            const row =
+                document.createElement("div");
+
+            row.className =
+                "task-row"
+                + (task.done ? " done" : "");
+
+            const number =
+                document.createElement("div");
+
+            number.className =
+                "task-number";
+
+            number.textContent =
+                `${index + 1}.`;
+
+            const name =
+                document.createElement("div");
+
+            name.className =
+                "task-name";
+
+            name.textContent =
+                task.title;
+
+            const deadline =
+                document.createElement("div");
+
+            deadline.className =
+                "task-deadline";
+
+            deadline.textContent =
+                formatTime(
+                    new Date(task.deadline)
+                );
+
+            const complete =
+                document.createElement("button");
+
+            complete.className =
+                "task-action";
+
+            complete.textContent =
+                task.done ? "↶" : "✓";
+
+            complete.title =
+                task.done
+                ? "Undo"
+                : "Complete";
+
+            complete.onclick =
+                () => toggleTask(task.id);
+
+            const timerButton =
+                document.createElement("button");
+
+            timerButton.className =
+                "task-action";
+
+            timerButton.textContent =
+                "T";
+
+            timerButton.title =
+                "Use this task for Pomodoro";
+
+            timerButton.onclick =
+                () => selectTimerTask(task.id);
+
+            const deleteButton =
+                document.createElement("button");
+
+            deleteButton.className =
+                "task-action";
+
+            deleteButton.textContent =
+                "×";
+
+            deleteButton.title =
+                "Delete";
+
+            deleteButton.onclick =
+                () => deleteTask(task.id);
+
+            row.appendChild(number);
+            row.appendChild(name);
+            row.appendChild(deadline);
+            row.appendChild(complete);
+            row.appendChild(timerButton);
+            row.appendChild(deleteButton);
+
+            list.appendChild(row);
+        }
+    );
 }
 
-function addTask() {
-  const titleEl = document.getElementById("taskTitle");
-  const deadlineEl = document.getElementById("taskDeadline");
-  const title = titleEl.value.trim();
-
-  if (!title) return alert("Enter a task.");
-
-  let deadline = deadlineEl.value
-    ? new Date(deadlineEl.value)
-    : new Date(Date.now() + 60*60*1000);
-
-  if (isNaN(deadline)) return alert("Invalid deadline.");
-
-  const task = {
-    id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
-    title,
-    deadline: deadline.toISOString(),
-    createdDate: todayKey(),
-    done: false,
-    completedAt: null
-  };
-
-  state.tasks.push(task);
-  save();
-  titleEl.value = "";
-  deadlineEl.value = "";
-  render();
-}
 
 function toggleTask(id) {
-  const t = state.tasks.find(x => x.id === id);
-  if (!t) return;
-  t.done = !t.done;
-  t.completedAt = t.done ? new Date().toISOString() : null;
-  save();
-  render();
+
+    const task =
+        data.tasks.find(
+            task => task.id === id
+        );
+
+    if (!task) return;
+
+    task.done = !task.done;
+
+    if (task.done) {
+
+        task.completedAt =
+            new Date().toISOString();
+
+    } else {
+
+        task.completedAt = null;
+    }
+
+    saveData();
+
+    renderAll();
 }
+
 
 function deleteTask(id) {
-  state.tasks = state.tasks.filter(t => t.id !== id);
-  save();
-  render();
+
+    data.tasks =
+        data.tasks.filter(
+            task => task.id !== id
+        );
+
+    saveData();
+
+    renderAll();
 }
 
-document.getElementById("addBtn").onclick = addTask;
-document.getElementById("taskTitle").addEventListener("keydown", e => {
-  if (e.key === "Enter") addTask();
-});
 
-/* ───────── Pomodoro ───────── */
+/* =========================================================
+   ADD TASK
+========================================================= */
 
-let timer = {
-  running: false,
-  mode: "focus",
-  seconds: 25 * 60,
-  interval: null,
-  taskId: null
+const addModal =
+    document.getElementById("addModal");
+
+
+document.getElementById(
+    "openAddTask"
+).onclick = () => {
+
+    addModal.style.display = "flex";
+
+    document.getElementById(
+        "taskName"
+    ).focus();
 };
+
+
+document.getElementById(
+    "cancelAdd"
+).onclick = () => {
+
+    addModal.style.display = "none";
+};
+
+
+document.getElementById(
+    "saveTask"
+).onclick = addTask;
+
+
+document.getElementById(
+    "taskName"
+).addEventListener(
+    "keydown",
+    event => {
+
+        if (event.key === "Enter") {
+            addTask();
+        }
+    }
+);
+
+
+function addTask() {
+
+    const name =
+        document.getElementById(
+            "taskName"
+        ).value.trim();
+
+    const deadlineInput =
+        document.getElementById(
+            "taskDeadline"
+        ).value;
+
+    if (!name) {
+
+        alert("Enter a task.");
+
+        return;
+    }
+
+    let deadline;
+
+    if (deadlineInput) {
+
+        deadline =
+            new Date(deadlineInput);
+
+    } else {
+
+        deadline =
+            new Date(
+                Date.now()
+                + 60 * 60 * 1000
+            );
+    }
+
+    const task = {
+
+        id:
+            Date.now().toString(),
+
+        title:
+            name,
+
+        deadline:
+            deadline.toISOString(),
+
+        createdDate:
+            dateKey(),
+
+        done:
+            false,
+
+        completedAt:
+            null
+    };
+
+    data.tasks.push(task);
+
+    saveData();
+
+    document.getElementById(
+        "taskName"
+    ).value = "";
+
+    document.getElementById(
+        "taskDeadline"
+    ).value = "";
+
+    addModal.style.display = "none";
+
+    renderAll();
+}
+
+
+/* =========================================================
+   POMODORO
+========================================================= */
+
+let timerSeconds = 25 * 60;
+
+let timerRunning = false;
+
+let timerInterval = null;
+
+let timerMode = "focus";
+
+let selectedTaskId = null;
+
 
 function updateTimerDisplay() {
-  const m = Math.floor(timer.seconds / 60);
-  const s = timer.seconds % 60;
-  document.getElementById("timerDisplay").textContent =
-    `${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
-  document.getElementById("timerMode").textContent =
-    timer.mode === "focus" ? "Focus" : "Break";
 
-  const task = state.tasks.find(t => t.id === timer.taskId);
-  document.getElementById("timerTask").textContent =
-    task ? task.title : "No task selected";
+    const minutes =
+        Math.floor(timerSeconds / 60);
 
-  document.getElementById("startBtn").textContent =
-    timer.running ? "Pause" : "Start";
+    const seconds =
+        timerSeconds % 60;
+
+    document.getElementById(
+        "timer"
+    ).textContent =
+        `${String(minutes).padStart(2,"0")}:${String(seconds).padStart(2,"0")}`;
+
+    document.getElementById(
+        "timerMode"
+    ).textContent =
+        timerMode === "focus"
+        ? "Focus"
+        : "Break";
+
+    const task =
+        data.tasks.find(
+            task => task.id === selectedTaskId
+        );
+
+    document.getElementById(
+        "timerTask"
+    ).textContent =
+        task
+        ? task.title
+        : "No task selected";
+
+    document.getElementById(
+        "startTimer"
+    ).textContent =
+        timerRunning
+        ? "Pause"
+        : "Start";
 }
 
-function resetTimer() {
-  clearInterval(timer.interval);
-  timer.running = false;
-  timer.mode = "focus";
-  timer.seconds = Number(document.getElementById("focusMin").value || 25) * 60;
-  updateTimerDisplay();
-}
-
-function switchMode() {
-  if (timer.mode === "focus") {
-    state.sessions.push({
-      date: todayKey(),
-      taskId: timer.taskId,
-      minutes: Number(document.getElementById("focusMin").value || 25),
-      completedAt: new Date().toISOString()
-    });
-    save();
-    timer.mode = "break";
-    timer.seconds = Number(document.getElementById("breakMin").value || 5) * 60;
-  } else {
-    timer.mode = "focus";
-    timer.seconds = Number(document.getElementById("focusMin").value || 25) * 60;
-  }
-  render();
-  updateTimerDisplay();
-}
-
-function tick() {
-  timer.seconds--;
-  if (timer.seconds <= 0) {
-    clearInterval(timer.interval);
-    timer.running = false;
-    switchMode();
-    alert(timer.mode === "break" ? "Focus session complete! Take a break." : "Break over. Back to focus!");
-  }
-  updateTimerDisplay();
-}
-
-document.getElementById("startBtn").onclick = () => {
-  if (timer.running) {
-    clearInterval(timer.interval);
-    timer.running = false;
-  } else {
-    timer.running = true;
-    timer.interval = setInterval(tick, 1000);
-  }
-  updateTimerDisplay();
-};
-
-document.getElementById("resetBtn").onclick = resetTimer;
-document.getElementById("focusMin").onchange = resetTimer;
-document.getElementById("breakMin").onchange = () => {
-  if (!timer.running && timer.mode === "break") resetTimer();
-};
 
 function selectTimerTask(id) {
-  timer.taskId = id;
-  updateTimerDisplay();
+
+    selectedTaskId = id;
+
+    updateTimerDisplay();
 }
 
-/* ───────── Progress / History ───────── */
 
-function renderActivity() {
-  const el = document.getElementById("activity");
-  const today = new Date();
-  el.innerHTML = "";
+document.getElementById(
+    "startTimer"
+).onclick = () => {
 
-  for (let i = 29; i >= 0; i--) {
-    const d = new Date(today);
-    d.setHours(0,0,0,0);
-    d.setDate(d.getDate() - i);
-    const key = todayKey(d);
+    if (timerRunning) {
 
-    const completed = state.tasks.filter(t =>
-      t.completedAt && todayKey(new Date(t.completedAt)) === key
-    ).length;
+        clearInterval(timerInterval);
 
-    const created = state.tasks.filter(t => t.createdDate === key).length;
+        timerRunning = false;
 
-    let level = 0;
-    if (completed >= 6) level = 4;
-    else if (completed >= 4) level = 3;
-    else if (completed >= 2) level = 2;
-    else if (completed >= 1) level = 1;
+        updateTimerDisplay();
 
-    const dot = document.createElement("button");
-    dot.className = "dot";
-    dot.dataset.level = level;
-    dot.title = `${formatDate(d)} — ${created} created, ${completed} completed`;
-    dot.onclick = () => showDay(key);
-    el.appendChild(dot);
-
-    if (i === 29) {
-      document.getElementById("activityStart").textContent =
-        d.toLocaleDateString(undefined, {day:"numeric", month:"short"});
+        return;
     }
-  }
+
+    timerRunning = true;
+
+    timerInterval =
+        setInterval(
+            timerTick,
+            1000
+        );
+
+    updateTimerDisplay();
+};
+
+
+function timerTick() {
+
+    timerSeconds--;
+
+    if (timerSeconds <= 0) {
+
+        clearInterval(timerInterval);
+
+        timerRunning = false;
+
+        if (timerMode === "focus") {
+
+            data.pomodoros.push({
+
+                date: dateKey(),
+
+                taskId:
+                    selectedTaskId,
+
+                completedAt:
+                    new Date().toISOString(),
+
+                minutes: 25
+            });
+
+            saveData();
+
+            timerMode = "break";
+
+            timerSeconds =
+                5 * 60;
+
+        } else {
+
+            timerMode = "focus";
+
+            timerSeconds =
+                25 * 60;
+        }
+
+        alert(
+            timerMode === "break"
+            ? "Focus session complete."
+            : "Break complete."
+        );
+    }
+
+    updateTimerDisplay();
 }
+
+
+document.getElementById(
+    "resetTimer"
+).onclick = () => {
+
+    clearInterval(timerInterval);
+
+    timerRunning = false;
+
+    timerMode = "focus";
+
+    timerSeconds =
+        25 * 60;
+
+    updateTimerDisplay();
+};
+
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+
+function renderProgress() {
+
+    const activity =
+        document.getElementById(
+            "activity"
+        );
+
+    activity.innerHTML = "";
+
+    const today =
+        new Date();
+
+    for (
+        let i = 29;
+        i >= 0;
+        i--
+    ) {
+
+        const day =
+            new Date(today);
+
+        day.setHours(
+            0, 0, 0, 0
+        );
+
+        day.setDate(
+            day.getDate() - i
+        );
+
+        const key =
+            dateKey(day);
+
+        const completed =
+            data.tasks.filter(
+                task =>
+                    task.completedAt
+                    &&
+                    dateKey(
+                        new Date(
+                            task.completedAt
+                        )
+                    ) === key
+            ).length;
+
+        let level = 0;
+
+        if (completed >= 6)
+            level = 4;
+
+        else if (completed >= 4)
+            level = 3;
+
+        else if (completed >= 2)
+            level = 2;
+
+        else if (completed >= 1)
+            level = 1;
+
+        const dot =
+            document.createElement(
+                "button"
+            );
+
+        dot.className =
+            "dot";
+
+        if (level > 0)
+            dot.classList.add(
+                `level${level}`
+            );
+
+        dot.title =
+            `${formatDate(day)}: ${completed} completed`;
+
+        dot.onclick =
+            () => openHistoryForDate(key);
+
+        activity.appendChild(dot);
+
+        if (i === 29) {
+
+            document.getElementById(
+                "progressStart"
+            ).textContent =
+                day.toLocaleDateString(
+                    undefined,
+                    {
+                        month: "short",
+                        day: "numeric"
+                    }
+                );
+        }
+    }
+}
+
+
+/* =========================================================
+   HISTORY
+========================================================= */
 
 function renderHistory() {
-  const el = document.getElementById("history");
-  const dates = [...new Set(state.tasks.map(t => t.createdDate))]
-    .sort().reverse();
 
-  if (!dates.length) {
-    el.innerHTML = '<div class="empty">No history yet.</div>';
-    return;
-  }
+    const list =
+        document.getElementById(
+            "historyList"
+        );
 
-  el.innerHTML = dates.map(key => {
-    const tasks = state.tasks.filter(t => t.createdDate === key);
-    const completed = tasks.filter(t => t.done).length;
-    const d = new Date(key + "T12:00:00");
+    const dates = [
+        ...new Set(
+            data.tasks.map(
+                task => task.createdDate
+            )
+        )
+    ].sort().reverse();
 
-    return `
-      <div class="history-day" onclick="showDay('${key}')" style="cursor:pointer">
-        <strong>${formatDate(d)}</strong>
-        <div class="history-meta">
-          ${tasks.length} created · ${completed} completed
-        </div>
-      </div>`;
-  }).join("");
+    if (dates.length === 0) {
+
+        list.innerHTML =
+            '<div style="color:#777">No history yet.</div>';
+
+        return;
+    }
+
+    list.innerHTML = "";
+
+    dates.forEach(
+        key => {
+
+            const tasks =
+                data.tasks.filter(
+                    task =>
+                        task.createdDate === key
+                );
+
+            const completed =
+                tasks.filter(
+                    task => task.done
+                ).length;
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+            row.className =
+                "history-day";
+
+            const date =
+                new Date(
+                    key + "T12:00:00"
+                );
+
+            row.innerHTML =
+                `<span>${formatDate(date)}</span>
+                 <span>${completed}/${tasks.length} completed</span>`;
+
+            row.onclick =
+                () => openHistoryForDate(key);
+
+            list.appendChild(row);
+        }
+    );
 }
 
-function showDay(key) {
-  const tasks = state.tasks.filter(t => t.createdDate === key);
-  const d = new Date(key + "T12:00:00");
 
-  if (!tasks.length) return;
+const historyModal =
+    document.getElementById(
+        "historyModal"
+    );
 
-  const text = tasks.map(t =>
-    `${t.done ? "✓" : "✗"} ${t.title}`
-  ).join("\n");
 
-  alert(`${formatDate(d)}\n\n${text}`);
+function openHistoryForDate(key) {
+
+    const tasks =
+        data.tasks.filter(
+            task =>
+                task.createdDate === key
+        );
+
+    if (!tasks.length)
+        return;
+
+    const date =
+        new Date(
+            key + "T12:00:00"
+        );
+
+    document.getElementById(
+        "historyTitle"
+    ).textContent =
+        formatDate(date);
+
+    const container =
+        document.getElementById(
+            "historyTasks"
+        );
+
+    container.innerHTML = "";
+
+    tasks.forEach(
+        task => {
+
+            const item =
+                document.createElement(
+                    "div"
+                );
+
+            item.className =
+                "history-task"
+                + (task.done ? " done" : "");
+
+            item.textContent =
+                task.title;
+
+            container.appendChild(item);
+        }
+    );
+
+    historyModal.style.display =
+        "flex";
 }
 
-updateTimerDisplay();
-render();
-setInterval(renderTasks, 30000);
+
+document.getElementById(
+    "closeHistory"
+).onclick = () => {
+
+    historyModal.style.display =
+        "none";
+};
+
+
+/* =========================================================
+   RENDER
+========================================================= */
+
+function renderAll() {
+
+    renderDates();
+
+    renderTasks();
+
+    renderProgress();
+
+    renderHistory();
+
+    updateTimerDisplay();
+}
+
+
+renderAll();
+
+
+/* Update countdowns periodically */
+
+setInterval(
+    renderTasks,
+    30000
+);
+
 </script>
+
 </body>
 </html>
-'''
-
-path = Path("/mnt/data/todo-dashboard/index.html")
-path.parent.mkdir(parents=True, exist_ok=True)
-path.write_text(html, encoding="utf-8")
-
-print(f"Created: {path}")
