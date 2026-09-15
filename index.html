@@ -58,6 +58,8 @@ body {
     border-radius: 12px;
 }
 
+/* POMODORO */
+
 .pomodoro {
     min-height: 345px;
     padding: 26px;
@@ -130,7 +132,7 @@ button:hover {
     text-align: left;
     font-size: 14px;
     color: #555;
-    max-height: 80px;
+    max-height: 85px;
     overflow-y: auto;
 }
 
@@ -138,16 +140,18 @@ button:hover {
     margin: 5px 0;
 }
 
+/* 30 DAY PROGRESS */
+
 .progress-box {
     min-height: 170px;
     padding: 26px;
 }
 
 .progress-dots {
-    display: flex;
-    gap: 9px;
-    flex-wrap: wrap;
-    margin-top: 12px;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 14px;
+    align-items: center;
 }
 
 .dot {
@@ -155,42 +159,35 @@ button:hover {
     height: 13px;
     border-radius: 50%;
     background: #111;
+    justify-self: center;
 }
 
 .dot.green {
     background: #2baa45;
 }
 
-.average-text {
-    margin-top: 18px;
+.dot.red {
+    background: #d93636;
+}
+
+.dot.future {
+    background: #111;
+}
+
+.progress-label {
+    margin-top: 16px;
     font-size: 13px;
     color: #666;
 }
 
 .graph-button {
-    margin-top: 18px;
+    margin-top: 16px;
 }
 
-.history {
-    min-height: 190px;
-    padding: 26px;
-}
-
-.history h2 {
-    margin: 0 0 18px;
-    font-size: 21px;
-}
-
-.history-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 9px 0;
-    border-bottom: 1px solid #eee;
-    font-size: 14px;
-}
+/* TASKS */
 
 .tasks {
-    min-height: 595px;
+    min-height: 535px;
     padding: 26px;
     display: flex;
     flex-direction: column;
@@ -290,8 +287,7 @@ button:hover {
     font-size: 14px;
 }
 
-input,
-select {
+input {
     width: 100%;
     padding: 11px;
     border: 1px solid #aaa;
@@ -313,6 +309,7 @@ select {
 }
 
 @media (max-width: 750px) {
+
     .app {
         padding: 25px 15px;
     }
@@ -356,6 +353,7 @@ select {
         <div class="left">
 
             <!-- POMODORO -->
+
             <div class="box pomodoro">
 
                 <h2>Pomodoro</h2>
@@ -369,41 +367,55 @@ select {
                 </div>
 
                 <div class="controls">
-                    <button class="primary" id="startPause">Start</button>
-                    <button id="reset">Reset</button>
+
+                    <button
+                        class="primary"
+                        id="startPause"
+                    >
+                        Start
+                    </button>
+
+                    <button id="reset">
+                        Reset
+                    </button>
+
                 </div>
 
-                <button class="settings-button" id="openSettings">
+                <button
+                    class="settings-button"
+                    id="openSettings"
+                >
                     Session settings
                 </button>
 
-                <div class="session-info" id="sessionInfo"></div>
+                <div
+                    class="session-info"
+                    id="sessionInfo"
+                ></div>
 
             </div>
 
 
-            <!-- PROGRESS -->
+            <!-- 30 DAY PROGRESS -->
+
             <div class="box progress-box">
 
-                <div class="progress-dots" id="progressDots"></div>
+                <div
+                    class="progress-dots"
+                    id="progressDots"
+                ></div>
 
-                <div class="average-text" id="averageText"></div>
+                <div
+                    class="progress-label"
+                    id="progressLabel"
+                ></div>
 
-                <button class="graph-button" id="openGraph">
+                <button
+                    class="graph-button"
+                    id="openGraph"
+                >
                     Progress graph
                 </button>
-
-            </div>
-
-
-            <!-- HISTORY -->
-            <div class="box history">
-
-                <h2>History</h2>
-
-                <div id="historyList">
-                    <div class="empty">No history yet.</div>
-                </div>
 
             </div>
 
@@ -411,13 +423,20 @@ select {
 
 
         <!-- TASKS -->
+
         <div class="box tasks">
 
             <h2>Tasks for today</h2>
 
-            <div class="task-list" id="taskList"></div>
+            <div
+                class="task-list"
+                id="taskList"
+            ></div>
 
-            <button class="primary add-task" id="openTaskModal">
+            <button
+                class="primary add-task"
+                id="openTaskModal"
+            >
                 Add task
             </button>
 
@@ -428,9 +447,12 @@ select {
 </div>
 
 
-<!-- ADD TASK MODAL -->
+<!-- ADD TASK -->
 
-<div class="modal" id="taskModal">
+<div
+    class="modal"
+    id="taskModal"
+>
 
     <div class="modal-content">
 
@@ -439,18 +461,48 @@ select {
         <form id="taskForm">
 
             <div class="form-group">
-                <label for="taskName">Task</label>
-                <input id="taskName" required autocomplete="off">
+
+                <label for="taskName">
+                    Task
+                </label>
+
+                <input
+                    id="taskName"
+                    required
+                    autocomplete="off"
+                >
+
             </div>
 
             <div class="form-group">
-                <label for="taskDeadline">Deadline</label>
-                <input id="taskDeadline" type="datetime-local">
+
+                <label for="taskDeadline">
+                    Deadline
+                </label>
+
+                <input
+                    id="taskDeadline"
+                    type="datetime-local"
+                >
+
             </div>
 
             <div class="modal-buttons">
-                <button type="button" id="cancelTask">Cancel</button>
-                <button class="primary" type="submit">Add task</button>
+
+                <button
+                    type="button"
+                    id="cancelTask"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    class="primary"
+                    type="submit"
+                >
+                    Add task
+                </button>
+
             </div>
 
         </form>
@@ -460,9 +512,12 @@ select {
 </div>
 
 
-<!-- SESSION SETTINGS MODAL -->
+<!-- SESSION SETTINGS -->
 
-<div class="modal" id="settingsModal">
+<div
+    class="modal"
+    id="settingsModal"
+>
 
     <div class="modal-content">
 
@@ -473,9 +528,11 @@ select {
             <div class="settings-grid">
 
                 <div class="form-group">
+
                     <label for="focusMinutes">
                         Focus minutes
                     </label>
+
                     <input
                         id="focusMinutes"
                         type="number"
@@ -483,12 +540,15 @@ select {
                         max="180"
                         required
                     >
+
                 </div>
 
                 <div class="form-group">
+
                     <label for="breakMinutes">
                         Break minutes
                     </label>
+
                     <input
                         id="breakMinutes"
                         type="number"
@@ -496,18 +556,27 @@ select {
                         max="60"
                         required
                     >
+
                 </div>
 
             </div>
 
             <div class="modal-buttons">
-                <button type="button" id="cancelSettings">
+
+                <button
+                    type="button"
+                    id="cancelSettings"
+                >
                     Cancel
                 </button>
 
-                <button class="primary" type="submit">
+                <button
+                    class="primary"
+                    type="submit"
+                >
                     Save
                 </button>
+
             </div>
 
         </form>
@@ -521,15 +590,30 @@ select {
 
 const STORAGE_KEY = "todo_dashboard_v3";
 
-const today = () => {
+
+/* ---------------- DATE ---------------- */
+
+function getToday() {
+
     const d = new Date();
+
     return d.toISOString().slice(0, 10);
-};
+}
 
-const formatDate = dateString => {
-    const [y, m, d] = dateString.split("-").map(Number);
 
-    return new Date(y, m - 1, d).toLocaleDateString(
+function formatDate(dateString) {
+
+    const [
+        year,
+        month,
+        day
+    ] = dateString.split("-").map(Number);
+
+    return new Date(
+        year,
+        month - 1,
+        day
+    ).toLocaleDateString(
         undefined,
         {
             weekday: "long",
@@ -538,54 +622,82 @@ const formatDate = dateString => {
             year: "numeric"
         }
     );
-};
+}
 
-const formatShortDate = dateString => {
-    const [y, m, d] = dateString.split("-").map(Number);
 
-    return new Date(y, m - 1, d).toLocaleDateString(
-        undefined,
-        {
-            month: "short",
-            day: "numeric"
-        }
-    );
-};
+document.getElementById(
+    "currentDate"
+).textContent =
+    formatDate(getToday());
 
 
 /* ---------------- DATA ---------------- */
 
 let data = JSON.parse(
-    localStorage.getItem(STORAGE_KEY) || "null"
+    localStorage.getItem(STORAGE_KEY)
+    || "null"
 );
 
 if (!data) {
+
     data = {
+
         tasks: [],
+
         sessions: [],
+
+        /*
+            Total completed focus time for
+            each individual date.
+
+            Example:
+
+            dailyTotals["2026-09-15"] = 125
+
+            means 125 minutes were completed
+            on September 15.
+        */
+
+        dailyTotals: {},
+
         settings: {
+
             focus: 25,
+
             break: 5
+
         }
+
     };
 }
 
-if (!data.settings) {
-    data.settings = {
-        focus: 25,
-        break: 5
-    };
+
+if (!data.tasks) {
+    data.tasks = [];
 }
 
 if (!data.sessions) {
     data.sessions = [];
 }
 
-if (!data.tasks) {
-    data.tasks = [];
+if (!data.dailyTotals) {
+    data.dailyTotals = {};
 }
 
+if (!data.settings) {
+
+    data.settings = {
+
+        focus: 25,
+
+        break: 5
+
+    };
+}
+
+
 function save() {
+
     localStorage.setItem(
         STORAGE_KEY,
         JSON.stringify(data)
@@ -593,23 +705,22 @@ function save() {
 }
 
 
-/* ---------------- DATE ---------------- */
-
-document.getElementById("currentDate").textContent =
-    formatDate(today());
-
-
 /* ---------------- TASKS ---------------- */
 
 function renderTasks() {
 
-    const list = document.getElementById("taskList");
+    const list =
+        document.getElementById(
+            "taskList"
+        );
 
     list.innerHTML = "";
 
-    const todaysTasks = data.tasks.filter(
-        task => task.date === today()
-    );
+    const todaysTasks =
+        data.tasks.filter(
+            task =>
+                task.date === getToday()
+        );
 
     if (todaysTasks.length === 0) {
 
@@ -621,23 +732,39 @@ function renderTasks() {
 
     todaysTasks.forEach(task => {
 
-        const row = document.createElement("div");
+        const row =
+            document.createElement("div");
 
         row.className =
-            "task" + (task.completed ? " completed" : "");
+            "task"
+            +
+            (
+                task.completed
+                    ? " completed"
+                    : ""
+            );
 
-        const name = document.createElement("div");
 
-        name.className = "task-name";
-        name.textContent = task.name;
+        const name =
+            document.createElement("div");
 
-        const deadline = document.createElement("div");
+        name.className =
+            "task-name";
 
-        deadline.className = "deadline";
+        name.textContent =
+            task.name;
+
+
+        const deadline =
+            document.createElement("div");
+
+        deadline.className =
+            "deadline";
 
         if (task.deadline) {
 
-            const date = new Date(task.deadline);
+            const date =
+                new Date(task.deadline);
 
             deadline.textContent =
                 date.toLocaleTimeString(
@@ -649,21 +776,26 @@ function renderTasks() {
                 );
         }
 
+
         const actions =
             document.createElement("div");
 
-        actions.className = "task-actions";
+        actions.className =
+            "task-actions";
 
 
-        /* COMPLETE */
+        /* DONE */
 
         const complete =
             document.createElement("button");
 
-        complete.className = "small-button";
+        complete.className =
+            "small-button";
 
         complete.textContent =
-            task.completed ? "Undo" : "Done";
+            task.completed
+                ? "Undo"
+                : "Done";
 
         complete.addEventListener(
             "click",
@@ -672,14 +804,13 @@ function renderTasks() {
                 task.completed =
                     !task.completed;
 
-                if (task.completed) {
-                    task.completedAt =
-                        new Date().toISOString();
-                } else {
-                    task.completedAt = null;
-                }
+                task.completedAt =
+                    task.completed
+                        ? new Date().toISOString()
+                        : null;
 
                 save();
+
                 renderTasks();
             }
         );
@@ -690,10 +821,14 @@ function renderTasks() {
         const pomo =
             document.createElement("button");
 
-        pomo.className = "small-button";
-        pomo.textContent = "T";
+        pomo.className =
+            "small-button";
 
-        pomo.title = "Use this task for Pomodoro";
+        pomo.textContent =
+            "T";
+
+        pomo.title =
+            "Use this task for Pomodoro";
 
         pomo.addEventListener(
             "click",
@@ -703,7 +838,8 @@ function renderTasks() {
 
                 document.getElementById(
                     "selectedTask"
-                ).textContent = task.name;
+                ).textContent =
+                    task.name;
             }
         );
 
@@ -713,8 +849,11 @@ function renderTasks() {
         const del =
             document.createElement("button");
 
-        del.className = "small-button";
-        del.textContent = "Delete";
+        del.className =
+            "small-button";
+
+        del.textContent =
+            "Delete";
 
         del.addEventListener(
             "click",
@@ -722,13 +861,15 @@ function renderTasks() {
 
                 data.tasks =
                     data.tasks.filter(
-                        x => x.id !== task.id
+                        x =>
+                            x.id !== task.id
                     );
 
                 if (
                     selectedTask &&
                     selectedTask.id === task.id
                 ) {
+
                     selectedTask = null;
 
                     document.getElementById(
@@ -738,8 +879,8 @@ function renderTasks() {
                 }
 
                 save();
+
                 renderTasks();
-                renderHistory();
             }
         );
 
@@ -757,11 +898,12 @@ function renderTasks() {
         );
 
         list.appendChild(row);
+
     });
 }
 
 
-/* ADD TASK */
+/* ---------------- ADD TASK ---------------- */
 
 document.getElementById(
     "openTaskModal"
@@ -814,12 +956,24 @@ document.getElementById(
         if (!name) return;
 
         data.tasks.push({
-            id: Date.now().toString(),
+
+            id:
+                Date.now().toString(),
+
             name,
-            date: today(),
-            deadline: deadline || null,
-            completed: false,
-            completedAt: null
+
+            date:
+                getToday(),
+
+            deadline:
+                deadline || null,
+
+            completed:
+                false,
+
+            completedAt:
+                null
+
         });
 
         save();
@@ -831,7 +985,6 @@ document.getElementById(
         ).classList.remove("open");
 
         renderTasks();
-        renderHistory();
     }
 );
 
@@ -839,21 +992,25 @@ document.getElementById(
 /* ---------------- POMODORO ---------------- */
 
 let mode = "focus";
+
 let running = false;
+
 let selectedTask = null;
+
 let remainingSeconds =
     data.settings.focus * 60;
 
 let interval = null;
 
 let currentSessionPauses = 0;
-let sessionNumber = 1;
 
 
 function updateTimer() {
 
     const minutes =
-        Math.floor(remainingSeconds / 60);
+        Math.floor(
+            remainingSeconds / 60
+        );
 
     const seconds =
         remainingSeconds % 60;
@@ -861,9 +1018,20 @@ function updateTimer() {
     document.getElementById(
         "timer"
     ).textContent =
-        String(minutes).padStart(2, "0")
+
+        String(minutes).padStart(
+            2,
+            "0"
+        )
+
         + ":"
-        + String(seconds).padStart(2, "0");
+
+        +
+
+        String(seconds).padStart(
+            2,
+            "0"
+        );
 }
 
 
@@ -875,31 +1043,38 @@ function startTimer() {
 
     document.getElementById(
         "startPause"
-    ).textContent = "Pause";
+    ).textContent =
+        "Pause";
 
-    interval = setInterval(
-        () => {
+    interval =
+        setInterval(
+            () => {
 
-            remainingSeconds--;
+                remainingSeconds--;
 
-            updateTimer();
+                updateTimer();
 
-            if (remainingSeconds <= 0) {
+                if (
+                    remainingSeconds <= 0
+                ) {
 
-                clearInterval(interval);
+                    clearInterval(
+                        interval
+                    );
 
-                running = false;
+                    running = false;
 
-                document.getElementById(
-                    "startPause"
-                ).textContent = "Start";
+                    document.getElementById(
+                        "startPause"
+                    ).textContent =
+                        "Start";
 
-                finishTimer();
-            }
+                    finishTimer();
+                }
 
-        },
-        1000
-    );
+            },
+            1000
+        );
 }
 
 
@@ -915,7 +1090,8 @@ function pauseTimer() {
 
     document.getElementById(
         "startPause"
-    ).textContent = "Start";
+    ).textContent =
+        "Start";
 
     renderSessionInfo();
 }
@@ -925,35 +1101,81 @@ function finishTimer() {
 
     if (mode === "focus") {
 
-        /* A completed focus session */
+        /*
+            This is the important part.
+
+            We add the completed session's
+            duration to the total for today.
+
+            Example:
+
+            25 + 25 + 25 = 75 minutes
+        */
+
+        const sessionMinutes =
+            Number(data.settings.focus);
+
+        const date =
+            getToday();
+
+        if (!data.dailyTotals[date]) {
+            data.dailyTotals[date] = 0;
+        }
+
+        data.dailyTotals[date] +=
+            sessionMinutes;
+
+
+        /*
+            Keep the session record too,
+            because we still need it for:
+
+            - pause history
+            - progress graph
+            - knowing when sessions happened
+        */
 
         data.sessions.push({
-            id: Date.now().toString(),
-            date: today(),
-            completedAt: new Date().toISOString(),
+
+            id:
+                Date.now().toString(),
+
+            date:
+
+                date,
+
+            completedAt:
+                new Date().toISOString(),
+
             taskId:
                 selectedTask
                     ? selectedTask.id
                     : null,
-            pauses: currentSessionPauses
+
+            pauses:
+                currentSessionPauses,
+
+            focusMinutes:
+                sessionMinutes
+
         });
 
         save();
 
         currentSessionPauses = 0;
 
-        sessionNumber++;
-
         mode = "break";
 
         remainingSeconds =
-            data.settings.break;
+            data.settings.break * 60;
 
         document.getElementById(
             "mode"
-        ).textContent = "Break";
+        ).textContent =
+            "Break";
 
         renderProgress();
+
         renderSessionInfo();
 
     } else {
@@ -961,11 +1183,12 @@ function finishTimer() {
         mode = "focus";
 
         remainingSeconds =
-            data.settings.focus;
+            data.settings.focus * 60;
 
         document.getElementById(
             "mode"
-        ).textContent = "Focus";
+        ).textContent =
+            "Focus";
     }
 
     updateTimer();
@@ -979,9 +1202,13 @@ document.getElementById(
     () => {
 
         if (running) {
+
             pauseTimer();
+
         } else {
+
             startTimer();
+
         }
     }
 );
@@ -1006,13 +1233,16 @@ document.getElementById(
 
         document.getElementById(
             "mode"
-        ).textContent = "Focus";
+        ).textContent =
+            "Focus";
 
         document.getElementById(
             "startPause"
-        ).textContent = "Start";
+        ).textContent =
+            "Start";
 
         updateTimer();
+
         renderSessionInfo();
     }
 );
@@ -1029,7 +1259,8 @@ function renderSessionInfo() {
 
     const sessions =
         data.sessions.filter(
-            s => s.date === today()
+            session =>
+                session.date === getToday()
         );
 
     if (sessions.length === 0) {
@@ -1041,12 +1272,12 @@ function renderSessionInfo() {
     }
 
     box.innerHTML =
-        `<div><strong>Today's sessions:</strong> ${sessions.length}</div>`
+        `<div><strong>Today's completed sessions:</strong> ${sessions.length}</div>`
         +
         sessions
             .map(
-                (s, i) =>
-                    `<div>Session ${i + 1} — ${s.pauses} pauses</div>`
+                (session, index) =>
+                    `<div>Session ${index + 1} — ${session.pauses} pauses</div>`
             )
             .join("");
 }
@@ -1121,14 +1352,18 @@ document.getElementById(
             return;
         }
 
-        data.settings.focus = focus;
-        data.settings.break = breakTime;
+        data.settings.focus =
+            focus;
+
+        data.settings.break =
+            breakTime;
 
         save();
 
         clearInterval(interval);
 
         running = false;
+
         mode = "focus";
 
         remainingSeconds =
@@ -1136,65 +1371,49 @@ document.getElementById(
 
         document.getElementById(
             "mode"
-        ).textContent = "Focus";
+        ).textContent =
+            "Focus";
 
         document.getElementById(
             "startPause"
-        ).textContent = "Start";
+        ).textContent =
+            "Start";
 
         document.getElementById(
             "settingsModal"
         ).classList.remove("open");
 
         updateTimer();
+
+        renderProgress();
     }
 );
 
 
-/* ---------------- PROGRESS DOTS ---------------- */
+/* ---------------- 30 DAY DOTS ---------------- */
 
-/*
-    Historical average is calculated from completed
-    focus sessions on previous days.
+function dateAfter(
+    dateString,
+    numberOfDays
+) {
 
-    Example:
+    const parts =
+        dateString
+            .split("-")
+            .map(Number);
 
-    Monday: 4 sessions
-    Tuesday: 6 sessions
-    Wednesday: 5 sessions
+    const date =
+        new Date(
+            parts[0],
+            parts[1] - 1,
+            parts[2]
+        );
 
-    Average = 5 sessions/day
+    date.setDate(
+        date.getDate() + numberOfDays
+    );
 
-    If today reaches 5 sessions,
-    all dots become green.
-*/
-
-function getAverageSessions() {
-
-    const yesterdaySessions = {};
-
-    data.sessions.forEach(session => {
-
-        if (session.date === today()) return;
-
-        if (!yesterdaySessions[session.date]) {
-            yesterdaySessions[session.date] = 0;
-        }
-
-        yesterdaySessions[session.date]++;
-    });
-
-    const values =
-        Object.values(yesterdaySessions);
-
-    if (values.length === 0) {
-        return 0;
-    }
-
-    return values.reduce(
-        (a, b) => a + b,
-        0
-    ) / values.length;
+    return date.toISOString().slice(0, 10);
 }
 
 
@@ -1207,115 +1426,138 @@ function renderProgress() {
 
     container.innerHTML = "";
 
-    const average =
-        getAverageSessions();
+    const startDate =
+        getToday();
 
-    const completedToday =
-        data.sessions.filter(
-            s => s.date === today()
-        ).length;
 
     /*
-        No historical data yet:
-        dots remain black.
+        Exactly 30 dots.
+
+        Dot 1 = today
+        Dot 2 = tomorrow
+        ...
+        Dot 30 = 29 days from today.
     */
 
-    const threshold =
-        Math.max(
-            1,
-            Math.ceil(average)
-        );
+    for (
+        let i = 0;
+        i < 30;
+        i++
+    ) {
 
-    const reached =
-        average > 0 &&
-        completedToday >= threshold;
-
-    /*
-        10 simple dots.
-        They are all black until today's
-        session count reaches the normal average.
-    */
-
-    for (let i = 0; i < 10; i++) {
+        const date =
+            dateAfter(
+                startDate,
+                i
+            );
 
         const dot =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
         dot.className =
-            "dot" +
-            (reached ? " green" : "");
+            "dot";
+
+
+        /*
+            Future day
+        */
+
+        if (date > startDate) {
+
+            dot.classList.add(
+                "future"
+            );
+
+        } else {
+
+            /*
+                Read the accumulated focus
+                time for this date.
+
+                This is NOT calculated from
+                session count.
+            */
+
+            const totalMinutes =
+                Number(
+                    data.dailyTotals[date]
+                ) || 0;
+
+
+            /*
+                8 hours = 480 minutes
+            */
+
+            if (
+                totalMinutes >= 480
+            ) {
+
+                dot.classList.add(
+                    "green"
+                );
+
+            } else {
+
+                dot.classList.add(
+                    "red"
+                );
+            }
+        }
+
+
+        /*
+            Hovering over a dot tells you
+            exactly how much time was done.
+        */
+
+        const totalMinutes =
+            Number(
+                data.dailyTotals[date]
+            ) || 0;
+
+        const hours =
+            Math.floor(
+                totalMinutes / 60
+            );
+
+        const minutes =
+            totalMinutes % 60;
+
+        dot.title =
+            `${date}: ${hours}h ${minutes}m`;
+
 
         container.appendChild(dot);
     }
 
-    const text =
-        document.getElementById(
-            "averageText"
+
+    /*
+        Today's total
+    */
+
+    const todayMinutes =
+        Number(
+            data.dailyTotals[startDate]
+        ) || 0;
+
+    const todayHours =
+        Math.floor(
+            todayMinutes / 60
         );
 
-    if (average === 0) {
+    const todayRemainingMinutes =
+        todayMinutes % 60;
 
-        text.textContent =
-            "Complete sessions on a few days to establish your average.";
-
-    } else {
-
-        text.textContent =
-            `${completedToday} / ${threshold} sessions today`;
-    }
+    document.getElementById(
+        "progressLabel"
+    ).textContent =
+        `Today: ${todayHours}h ${todayRemainingMinutes}m / 8h`;
 }
 
 
-/* ---------------- HISTORY ---------------- */
-
-function renderHistory() {
-
-    const box =
-        document.getElementById(
-            "historyList"
-        );
-
-    const dates = [
-        ...new Set(
-            data.sessions.map(
-                s => s.date
-            )
-        )
-    ].sort().reverse();
-
-    if (dates.length === 0) {
-
-        box.innerHTML =
-            '<div class="empty">No history yet.</div>';
-
-        return;
-    }
-
-    box.innerHTML = "";
-
-    dates.slice(0, 5).forEach(date => {
-
-        const count =
-            data.sessions.filter(
-                s => s.date === date
-            ).length;
-
-        const row =
-            document.createElement("div");
-
-        row.className = "history-row";
-
-        row.innerHTML =
-            `<span>${formatShortDate(date)}</span>`
-            +
-            `<span>${count} session${count === 1 ? "" : "s"}</span>`;
-
-        box.appendChild(row);
-    });
-}
-
-
-/* ---------------- GRAPH BUTTON ---------------- */
+/* ---------------- GRAPH ---------------- */
 
 document.getElementById(
     "openGraph"
@@ -1332,9 +1574,11 @@ document.getElementById(
 /* ---------------- INITIALIZE ---------------- */
 
 renderTasks();
+
 renderProgress();
-renderHistory();
+
 renderSessionInfo();
+
 updateTimer();
 
 </script>
